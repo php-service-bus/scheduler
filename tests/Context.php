@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common\Tests;
+namespace ServiceBus\Scheduler\Tests;
 
 use Amp\Promise;
 use Amp\Success;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,18 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common\Tests;
+namespace ServiceBus\Scheduler\Tests;
 
 use function Amp\Promise\wait;
 use PHPUnit\Framework\TestCase;
-use ServiceBus\Scheduler\Common\Contract\OperationScheduled;
-use ServiceBus\Scheduler\Common\Contract\SchedulerOperationCanceled;
-use ServiceBus\Scheduler\Common\Exceptions\DuplicateScheduledOperation;
-use ServiceBus\Scheduler\Common\Exceptions\InvalidScheduledOperationExecutionDate;
-use ServiceBus\Scheduler\Common\ScheduledOperationId;
-use ServiceBus\Scheduler\Common\SchedulerProvider;
-use ServiceBus\Scheduler\Common\Store\SchedulerStore;
-use ServiceBus\Scheduler\Common\Store\SqlSchedulerStore;
+use ServiceBus\Scheduler\Contract\OperationScheduled;
+use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
+use ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation;
+use ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate;
+use ServiceBus\Scheduler\ScheduledOperationId;
+use ServiceBus\Scheduler\SchedulerProvider;
+use ServiceBus\Scheduler\Store\SchedulerStore;
+use ServiceBus\Scheduler\Store\SqlSchedulerStore;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\StorageConfiguration;
 use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;

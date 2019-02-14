@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,22 +10,26 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common;
+namespace ServiceBus\Scheduler;
 
 use function Amp\call;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Common\Messages\Command;
-use ServiceBus\Scheduler\Common\Contract\OperationScheduled;
-use ServiceBus\Scheduler\Common\Contract\SchedulerOperationCanceled;
-use ServiceBus\Scheduler\Common\Exceptions\DuplicateScheduledOperation;
-use ServiceBus\Scheduler\Common\Exceptions\ErrorCancelingScheduledOperation;
-use ServiceBus\Scheduler\Common\Exceptions\OperationSchedulingError;
-use ServiceBus\Scheduler\Common\Store\SchedulerStore;
+use ServiceBus\Scheduler\Contract\OperationScheduled;
+use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
+use ServiceBus\Scheduler\Data\NextScheduledOperation;
+use ServiceBus\Scheduler\Data\ScheduledOperation;
+use ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation;
+use ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation;
+use ServiceBus\Scheduler\Exceptions\OperationSchedulingError;
+use ServiceBus\Scheduler\Store\SchedulerStore;
 use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
 
 /**
  * Scheduler provider
+ *
+ * @api
  */
 final class SchedulerProvider
 {
@@ -54,9 +58,9 @@ final class SchedulerProvider
      *
      * @return Promise Doesn't return result
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\InvalidScheduledOperationExecutionDate
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\DuplicateScheduledOperation
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\OperationSchedulingError
+     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
+     * @throws \ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation
+     * @throws \ServiceBus\Scheduler\Exceptions\OperationSchedulingError
      */
     public function schedule(
         ScheduledOperationId $id,
@@ -106,7 +110,7 @@ final class SchedulerProvider
      *
      * @return Promise Doesn't return result
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\ErrorCancelingScheduledOperation
+     * @throws \ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation
      */
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {
@@ -132,7 +136,7 @@ final class SchedulerProvider
     }
 
     /**
-     * @psalm-return callable(\ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator
+     * @psalm-return callable(\ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator
      *
      * @param ServiceBusContext    $context
      * @param ScheduledOperationId $id
@@ -151,7 +155,7 @@ final class SchedulerProvider
     }
 
     /**
-     * @psalm-return callable(ScheduledOperation, \ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator
+     * @psalm-return callable(ScheduledOperation, \ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator
      *
      * @param ServiceBusContext $context
      *

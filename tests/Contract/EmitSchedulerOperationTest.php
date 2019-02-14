@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,11 +10,11 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common\Tests\Contract;
+namespace ServiceBus\Scheduler\Tests\Contract;
 
 use PHPUnit\Framework\TestCase;
-use ServiceBus\Scheduler\Common\Contract\EmitSchedulerOperation;
-use ServiceBus\Scheduler\Common\ScheduledOperationId;
+use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
+use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
  *

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,12 +10,15 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common;
+namespace ServiceBus\Scheduler\Data;
 
 use function ServiceBus\Common\datetimeInstantiator;
+use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
  * Scheduled job data (for next job)
+ *
+ * @internal
  *
  * @property-read ScheduledOperationId $id
  * @property-read \DateTimeImmutable   $time
@@ -41,7 +44,7 @@ final class NextScheduledOperation
      *
      * @return self
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
+     * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Common\Exceptions\DateTime\CreateDateTimeFailed
      */
     public static function fromRow(array $row): self

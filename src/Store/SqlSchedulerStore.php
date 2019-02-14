@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,16 +10,16 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common\Store;
+namespace ServiceBus\Scheduler\Store;
 
 use function Amp\asyncCall;
 use function Amp\call;
 use Amp\Promise;
 use function ServiceBus\Common\datetimeToString;
-use ServiceBus\Scheduler\Common\NextScheduledOperation;
-use ServiceBus\Scheduler\Common\ScheduledOperation;
-use ServiceBus\Scheduler\Common\ScheduledOperationId;
-use ServiceBus\Scheduler\Common\Store\Exceptions\ScheduledOperationNotFound;
+use ServiceBus\Scheduler\Data\NextScheduledOperation;
+use ServiceBus\Scheduler\Data\ScheduledOperation;
+use ServiceBus\Scheduler\ScheduledOperationId;
+use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Storage\Common\BinaryDataDecoder;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\QueryExecutor;
@@ -294,7 +294,7 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @return \Generator
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\UnserializeCommandFailed
+     * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed

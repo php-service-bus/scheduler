@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,16 +10,17 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common;
+namespace ServiceBus\Scheduler\Processor;
 
 use Amp\Failure;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Common\Messages\Message;
-use ServiceBus\Scheduler\Common\Contract\EmitSchedulerOperation;
-use ServiceBus\Scheduler\Common\Contract\OperationScheduled;
-use ServiceBus\Scheduler\Common\Contract\SchedulerOperationCanceled;
-use ServiceBus\Scheduler\Common\Contract\SchedulerOperationEmitted;
+use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
+use ServiceBus\Scheduler\Contract\OperationScheduled;
+use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
+use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
+use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
 
 /**
  * Scheduler listener\command handler
@@ -50,6 +51,7 @@ final class SchedulerMessagesProcessor
      * @return Promise
      *
      * @throws \LogicException Unsupported message type specified
+     * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
      */
     public function handle(Message $message, ServiceBusContext $context): Promise
     {

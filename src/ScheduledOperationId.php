@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,13 +10,13 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common;
+namespace ServiceBus\Scheduler;
 
 use function ServiceBus\Common\uuid;
-use ServiceBus\Scheduler\Common\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
+use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
 
 /**
- *
+ * @api
  */
 final class ScheduledOperationId
 {
@@ -38,7 +38,7 @@ final class ScheduledOperationId
      *
      * @return ScheduledOperationId
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
+     * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      */
     public static function restore(string $value): self
     {

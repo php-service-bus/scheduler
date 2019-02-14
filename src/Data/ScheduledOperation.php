@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,15 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common;
+namespace ServiceBus\Scheduler\Data;
 
 use function ServiceBus\Common\datetimeInstantiator;
 use ServiceBus\Common\Messages\Command;
-use ServiceBus\Scheduler\Common\Exceptions\InvalidScheduledOperationExecutionDate;
-use ServiceBus\Scheduler\Common\Exceptions\UnserializeCommandFailed;
+use ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate;
+use ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed;
+use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
  * Scheduled job data
+ *
+ * @internal
  *
  * @property-read ScheduledOperationId $id
  * @property-read Command              $command
@@ -62,7 +65,7 @@ final class ScheduledOperation
      *
      * @return ScheduledOperation
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\InvalidScheduledOperationExecutionDate
+     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      */
     public static function new(ScheduledOperationId $id, Command $command, \DateTimeImmutable $dateTime): self
     {
@@ -76,8 +79,8 @@ final class ScheduledOperation
      *
      * @return self
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\UnserializeCommandFailed
+     * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
+     * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Common\Exceptions\DateTime\CreateDateTimeFailed
      */
     public static function restoreFromRow(array $data): self
@@ -125,7 +128,7 @@ final class ScheduledOperation
      *
      * @return void
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\InvalidScheduledOperationExecutionDate
+     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      */
     private static function validateDatetime(\DateTimeImmutable $dateTime): void
     {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,10 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common;
+namespace ServiceBus\Scheduler\Emitter;
 
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
+use ServiceBus\Scheduler\Data\NextScheduledOperation;
+use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
  *
@@ -31,7 +33,7 @@ interface SchedulerEmitter
      *
      * @return Promise
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmitFailed
+     * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
      */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise;
 
@@ -45,7 +47,7 @@ interface SchedulerEmitter
      *
      * @return Promise
      *
-     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmitFailed
+     * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
      */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise;
 }

@@ -1,6 +1,6 @@
 {
   "name": "php-service-bus/scheduler",
-  "description": "Common scheduler implementation",
+  "description": "Scheduler implementation",
   "type": "library",
   "keywords": [
     "async-php",
@@ -18,12 +18,12 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "ServiceBus\\Scheduler\\Common\\": "src/"
+      "ServiceBus\\Scheduler\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "ServiceBus\\Scheduler\\Common\\Tests\\": "tests/",
+      "ServiceBus\\Scheduler\\Tests\\": "tests/",
       "ServiceBus\\Common\\Tests\\": "vendor/php-service-bus/common/tests/",
       "ServiceBus\\Storage\\Common\\Tests\\": "vendor/php-service-bus/storage-common/tests/",
       "ServiceBus\\Storage\\Sql\\Tests\\": "vendor/php-service-bus/storage-sql/tests/"

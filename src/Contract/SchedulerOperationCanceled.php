@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,14 +10,16 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common\Contract;
+namespace ServiceBus\Scheduler\Contract;
 
 use ServiceBus\Common\Messages\Event;
-use ServiceBus\Scheduler\Common\NextScheduledOperation;
-use ServiceBus\Scheduler\Common\ScheduledOperationId;
+use ServiceBus\Scheduler\Data\NextScheduledOperation;
+use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
  * Scheduler operation canceled
+ *
+ * @internal
  *
  * @property-read ScheduledOperationId        $id
  * @property-read string|null                 $reason
