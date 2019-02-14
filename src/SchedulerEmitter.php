@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation interfaces
+ * Common scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -30,6 +30,8 @@ interface SchedulerEmitter
      * @param ServiceBusContext    $context
      *
      * @return Promise
+     *
+     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmitFailed
      */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise;
 
@@ -42,6 +44,8 @@ interface SchedulerEmitter
      * @param ServiceBusContext           $context
      *
      * @return Promise
+     *
+     * @throws \ServiceBus\Scheduler\Common\Exceptions\EmitFailed
      */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise;
 }

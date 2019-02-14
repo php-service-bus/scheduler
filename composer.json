@@ -1,6 +1,6 @@
 {
   "name": "php-service-bus/scheduler",
-  "description": "Common scheduler implementation interfaces",
+  "description": "Common scheduler implementation",
   "type": "library",
   "keywords": [
     "async-php",

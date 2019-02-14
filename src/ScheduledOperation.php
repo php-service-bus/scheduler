@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation interfaces
+ * Common scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -89,6 +89,7 @@ final class ScheduledOperation
 
         if(true === \is_string($serializedCommand))
         {
+            /** @var Command|false $command */
             $command = \unserialize($serializedCommand, ['allowed_classes' => true]);
 
             if($command instanceof Command)

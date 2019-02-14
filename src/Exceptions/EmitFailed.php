@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation
+ * Common scheduler implementation interfaces
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -10,12 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace ServiceBus\Scheduler\Common\Store\Exceptions;
+namespace ServiceBus\Scheduler\Common\Exceptions;
 
 /**
  *
  */
-final class ScheduledOperationNotFound extends \RuntimeException
+final class EmitFailed extends \RuntimeException
 {
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation interfaces
+ * Common scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -24,7 +24,7 @@ interface SchedulerStore
     /**
      * Extract operation (load and delete)
      *
-     * @psalm-param callable(ScheduledOperation|null, ?NextScheduledOperation|null):\Generator $postExtract
+     * @psalm-param callable(ScheduledOperation|null, ?\ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator $postExtract
      *
      * @param ScheduledOperationId $id
      * @param callable             $postExtract
@@ -41,7 +41,7 @@ interface SchedulerStore
     /**
      * Remove operation
      *
-     * @psalm-param callable(NextScheduledOperation|null):Generator $postRemove
+     * @psalm-param callable(\ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator $postRemove
      *
      * @param ScheduledOperationId $id
      * @param callable             $postRemove
@@ -57,7 +57,7 @@ interface SchedulerStore
     /**
      * Save a new operation
      *
-     * @psalm-param callable(ScheduledOperation, NextScheduledOperation|null):Generator $postAdd
+     * @psalm-param callable(ScheduledOperation, \ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator $postAdd
      *
      * @param ScheduledOperation $operation
      * @param callable           $postAdd

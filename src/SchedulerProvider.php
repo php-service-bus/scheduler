@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation interfaces
+ * Common scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -132,7 +132,7 @@ final class SchedulerProvider
     }
 
     /**
-     * @psalm-return callable(NextScheduledOperation|null):Generator
+     * @psalm-return callable(\ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator
      *
      * @param ServiceBusContext    $context
      * @param ScheduledOperationId $id
@@ -151,7 +151,7 @@ final class SchedulerProvider
     }
 
     /**
-     * @psalm-return callable(ScheduledOperation, NextScheduledOperation|null):Generator
+     * @psalm-return callable(ScheduledOperation, \ServiceBus\Scheduler\Common\NextScheduledOperation|null):\Generator
      *
      * @param ServiceBusContext $context
      *

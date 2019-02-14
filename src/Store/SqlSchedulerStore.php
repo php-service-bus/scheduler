@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common scheduler implementation interfaces
+ * Common scheduler implementation
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -55,7 +55,7 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise
     {
-        /** @psalm-suppress InvalidArgument Incorrect psalm unpack parameters (...$args) */
+        /** @psalm-suppress InvalidArgument */
         return call(
             function(ScheduledOperationId $id) use ($postExtract): \Generator
             {
@@ -69,7 +69,10 @@ final class SqlSchedulerStore implements SchedulerStore
                     );
                 }
 
-                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
+                /**
+                 * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                 * @var \ServiceBus\Storage\Common\Transaction $transaction
+                 */
                 $transaction = yield $this->adapter->transaction();
 
                 try
@@ -79,7 +82,7 @@ final class SqlSchedulerStore implements SchedulerStore
                     /** @var NextScheduledOperation|null $nextOperation */
                     $nextOperation = yield from $this->fetchNextOperation($transaction);
 
-                    /** @psalm-suppress InvalidArgument Incorrect psalm unpack parameters (...$args) */
+                    /** @psalm-suppress InvalidArgument */
                     asyncCall($postExtract, $operation, $nextOperation);
 
                     yield $transaction->commit();
@@ -105,11 +108,14 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise
     {
-        /** @psalm-suppress InvalidArgument Incorrect psalm unpack parameters (...$args) */
+        /** @psalm-suppress InvalidArgument */
         return call(
             function(ScheduledOperationId $id) use ($postRemove): \Generator
             {
-                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
+                /**
+                 * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                 * @var \ServiceBus\Storage\Common\Transaction $transaction
+                 */
                 $transaction = yield $this->adapter->transaction();
 
                 try
@@ -119,7 +125,7 @@ final class SqlSchedulerStore implements SchedulerStore
                     /** @var NextScheduledOperation|null $nextOperation */
                     $nextOperation = yield from $this->fetchNextOperation($transaction);
 
-                    /** @psalm-suppress InvalidArgument Incorrect psalm unpack parameters (...$args) */
+                    /** @psalm-suppress InvalidArgument */
                     asyncCall($postRemove, $nextOperation);
 
                     yield $transaction->commit();
@@ -145,11 +151,14 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise
     {
-        /** @psalm-suppress InvalidArgument Incorrect psalm unpack parameters (...$args) */
+        /** @psalm-suppress InvalidArgument */
         return call(
             function(ScheduledOperation $operation) use ($postAdd): \Generator
             {
-                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
+                /**
+                 * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                 * @var \ServiceBus\Storage\Common\Transaction $transaction
+                 */
                 $transaction = yield $this->adapter->transaction();
 
                 try
@@ -163,12 +172,16 @@ final class SqlSchedulerStore implements SchedulerStore
 
                     $compiledQuery = $insertQuery->compile();
 
+                    /** @psalm-suppress TooManyTemplateParams Invalid Promise template */
                     yield $transaction->execute($compiledQuery->sql(), $compiledQuery->params());
 
-                    /** @var NextScheduledOperation|null $nextOperation */
+                    /**
+                     * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                     * @var NextScheduledOperation|null $nextOperation
+                     */
                     $nextOperation = yield from $this->fetchNextOperation($transaction);
 
-                    /** @psalm-suppress InvalidArgument Incorrect psalm unpack parameters (...$args) */
+                    /** @psalm-suppress InvalidArgument */
                     asyncCall($postAdd, $operation, $nextOperation);
 
                     yield $transaction->commit();
@@ -211,11 +224,17 @@ final class SqlSchedulerStore implements SchedulerStore
 
         $compiledQuery = $selectQuery->compile();
 
-        /** @var \ServiceBus\Storage\Common\ResultSet $resultSet */
+        /**
+         * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @var \ServiceBus\Storage\Common\ResultSet $resultSet
+         */
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
             yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
-        /** @var array<string, string>|null $result */
+        /**
+         * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @var array<string, string>|null $result
+         */
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
 
@@ -255,7 +274,10 @@ final class SqlSchedulerStore implements SchedulerStore
 
         $compiledQuery = $updateQuery->compile();
 
-        /** @var \ServiceBus\Storage\Common\ResultSet $resultSet */
+        /**
+         * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @var \ServiceBus\Storage\Common\ResultSet $resultSet
+         */
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
             yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
@@ -286,7 +308,10 @@ final class SqlSchedulerStore implements SchedulerStore
         $selectQuery   = selectQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id));
         $compiledQuery = $selectQuery->compile();
 
-        /** @var \ServiceBus\Storage\Common\ResultSet $resultSet */
+        /**
+         * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @var \ServiceBus\Storage\Common\ResultSet $resultSet
+         */
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
             yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
@@ -329,7 +354,10 @@ final class SqlSchedulerStore implements SchedulerStore
         $deleteQuery   = deleteQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id));
         $compiledQuery = $deleteQuery->compile();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /**
+         * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @noinspection PhpUnhandledExceptionInspection
+         */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
     }
 }
