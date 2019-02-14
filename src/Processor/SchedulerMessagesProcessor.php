@@ -15,6 +15,7 @@ namespace ServiceBus\Scheduler\Processor;
 use Amp\Failure;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
+use ServiceBus\Common\MessageExecutor\MessageExecutor;
 use ServiceBus\Common\Messages\Message;
 use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
@@ -25,7 +26,7 @@ use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
 /**
  * Scheduler listener\command handler
  */
-final class SchedulerMessagesProcessor
+final class SchedulerMessagesProcessor implements MessageExecutor
 {
     /**
      * @var SchedulerEmitter
@@ -53,7 +54,7 @@ final class SchedulerMessagesProcessor
      * @throws \LogicException Unsupported message type specified
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
      */
-    public function handle(Message $message, ServiceBusContext $context): Promise
+    public function __invoke(Message $message, ServiceBusContext $context): Promise
     {
         if($message instanceof EmitSchedulerOperation)
         {

@@ -28,7 +28,7 @@
             <directory>./vendor/php-service-bus/storage-sql/tests</directory>
         </testsuite>
 
-        <testsuite name="Common scheduler implementation">
+        <testsuite name="Scheduler implementation">
             <directory>./tests/</directory>
         </testsuite>
 
