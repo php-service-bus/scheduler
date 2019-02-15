@@ -19,7 +19,6 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Scheduler operation emitted
  *
- * @internal
  * @see EmitSchedulerOperation
  *
  * @property-read ScheduledOperationId        $id

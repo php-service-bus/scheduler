@@ -19,8 +19,6 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Scheduler operation canceled
  *
- * @internal
- *
  * @property-read ScheduledOperationId        $id
  * @property-read string|null                 $reason
  * @property-read NextScheduledOperation|null $nextOperation

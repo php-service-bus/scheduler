@@ -20,8 +20,6 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Operation successful scheduled
  *
- * @internal
- *
  * @property-read ScheduledOperationId        $id
  * @property-read string                      $commandNamespace
  * @property-read \DateTimeImmutable          $executionDate
