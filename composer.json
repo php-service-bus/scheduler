@@ -31,12 +31,13 @@
   },
   "require": {
     "php": ">=7.2",
+    "ext-bcmath": "*",
     "amphp/amp": "^2",
     "php-service-bus/common": "^v3.0",
     "php-service-bus/storage-common": "^v3.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7",
+    "phpunit/phpunit": "^8",
     "vimeo/psalm": "^v3",
     "doctrine/dbal": "^v2.6",
     "php-service-bus/storage-sql": "^v3.0"

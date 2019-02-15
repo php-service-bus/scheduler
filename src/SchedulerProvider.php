@@ -77,8 +77,9 @@ final class SchedulerProvider
                 {
                     yield $this->store->add($operation, self::createPostAdd($context));
 
-                    $context->logContextMessage('Operation "{messageClass}" scheduled', [
-                            'messageClass' => \get_class($operation->command)
+                    $context->logContextMessage('Operation "{messageClass}" successfully scheduled for {executionDate}', [
+                            'messageClass'  => \get_class($operation->command),
+                            'executionDate' => $operation->date->format('Y-m-d H:i:s')
                         ]
                     );
                 }
@@ -136,8 +137,6 @@ final class SchedulerProvider
     }
 
     /**
-     * @psalm-return callable(\ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator
-     *
      * @param ServiceBusContext    $context
      * @param ScheduledOperationId $id
      * @param string|null          $reason
@@ -155,8 +154,6 @@ final class SchedulerProvider
     }
 
     /**
-     * @psalm-return callable(ScheduledOperation, \ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator
-     *
      * @param ServiceBusContext $context
      *
      * @return callable

@@ -96,17 +96,14 @@ final class RabbitMQEmitter implements SchedulerEmitter
                     $id    = $nextOperation->id;
                     $delay = $this->calculateExecutionDelay($nextOperation);
 
-                    /** @var array<string, int> $headers */
-                    $headers = ['x-delay', $delay];
-
                     /** Message will return after a specified time interval */
                     yield $context->delivery(
                         EmitSchedulerOperation::create($id),
-                        SchedulerDeliveryOptions::scheduledMessage($context->traceId(), $headers)
+                        SchedulerDeliveryOptions::scheduledMessage($context->traceId(), $delay)
                     );
 
                     $context->logContextMessage(
-                        'Scheduled operation with identifier "{scheduledOperationId}" will be executed in "{scheduledOperationDelay}" seconds', [
+                        'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds', [
                             'scheduledOperationId'    => $id,
                             'scheduledOperationDelay' => $delay / 1000
                         ]
@@ -116,13 +113,12 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
-            }
+            },
+            $nextOperation
         );
     }
 
     /**
-     * @psalm-return callable(ScheduledOperation|null, ?\ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator
-     *
      * @param ServiceBusContext $context
      *
      * @return callable
@@ -170,6 +166,6 @@ final class RabbitMQEmitter implements SchedulerEmitter
         /** @noinspection UnnecessaryCastingInspection */
         $executionDelay = $nextScheduledOperation->time->getTimestamp() - $currentDate->getTimestamp();
 
-        return $executionDelay * 1000;
+        return (int) bcmul((string) $executionDelay, '1000');
     }
 }

@@ -24,8 +24,6 @@ interface SchedulerStore
     /**
      * Extract operation (load and delete)
      *
-     * @psalm-param callable(ScheduledOperation|null, ?\ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator $postExtract
-     *
      * @param ScheduledOperationId $id
      * @param callable             $postExtract
      *
@@ -41,8 +39,6 @@ interface SchedulerStore
     /**
      * Remove operation
      *
-     * @psalm-param callable(\ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator $postRemove
-     *
      * @param ScheduledOperationId $id
      * @param callable             $postRemove
      *
@@ -56,8 +52,6 @@ interface SchedulerStore
 
     /**
      * Save a new operation
-     *
-     * @psalm-param callable(ScheduledOperation, \ServiceBus\Scheduler\Data\NextScheduledOperation|null):\Generator $postAdd
      *
      * @param ScheduledOperation $operation
      * @param callable           $postAdd

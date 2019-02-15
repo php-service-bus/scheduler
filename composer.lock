@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6a7435f031790c05ad8e33b58960066b",
-    "content-hash": "a0ad52ec81dda34eeb9afa15a7751eed",
+    "hash": "71d439d7e5aba6ee71703aee7cc72cdc",
+    "content-hash": "039eb373c43d8777521cd504dc4a2c51",
     "packages": [
         {
             "name": "amphp/amp",
@@ -130,16 +130,16 @@
         },
         {
             "name": "php-service-bus/common",
-            "version": "v3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-service-bus/common.git",
-                "reference": "a9e3170dcd5523da89a0db97b27eed313e723738"
+                "reference": "71e9167bdec0e245cc77bc7fbb37c250481693ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-service-bus/common/zipball/a9e3170dcd5523da89a0db97b27eed313e723738",
-                "reference": "a9e3170dcd5523da89a0db97b27eed313e723738",
+                "url": "https://api.github.com/repos/php-service-bus/common/zipball/71e9167bdec0e245cc77bc7fbb37c250481693ef",
+                "reference": "71e9167bdec0e245cc77bc7fbb37c250481693ef",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
                 "ramsey/uuid": "^3.7"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7",
+                "phpunit/phpunit": "^8",
                 "symfony/dependency-injection": "^v4.2",
                 "vimeo/psalm": "^3"
             },
@@ -179,20 +179,20 @@
                 "command-bus",
                 "messaging"
             ],
-            "time": "2019-02-11 07:59:39"
+            "time": "2019-02-15 09:15:23"
         },
         {
             "name": "php-service-bus/storage-common",
-            "version": "v3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-service-bus/storage-common.git",
-                "reference": "6ee58724072711bcb568d83831ce5bb95f677d2d"
+                "reference": "f6f18f1e1d612841a19e6bb85961624832584d27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-service-bus/storage-common/zipball/6ee58724072711bcb568d83831ce5bb95f677d2d",
-                "reference": "6ee58724072711bcb568d83831ce5bb95f677d2d",
+                "url": "https://api.github.com/repos/php-service-bus/storage-common/zipball/f6f18f1e1d612841a19e6bb85961624832584d27",
+                "reference": "f6f18f1e1d612841a19e6bb85961624832584d27",
                 "shasum": ""
             },
             "require": {
@@ -200,7 +200,7 @@
             },
             "require-dev": {
                 "amphp/amp": "^2",
-                "phpunit/phpunit": "^7",
+                "phpunit/phpunit": "^8",
                 "vimeo/psalm": "^3"
             },
             "type": "library",
@@ -227,7 +227,7 @@
                 "command-bus",
                 "messaging"
             ],
-            "time": "2019-02-11 14:16:18"
+            "time": "2019-02-15 09:29:40"
         },
         {
             "name": "ramsey/uuid",
@@ -1489,16 +1489,16 @@
         },
         {
             "name": "php-service-bus/storage-sql",
-            "version": "v3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-service-bus/storage-sql.git",
-                "reference": "b99e6c93008bcb34f37975caf5dac59fad412d6e"
+                "reference": "280228b8ed61897dc106a1f1aaca4d20b42dd240"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-service-bus/storage-sql/zipball/b99e6c93008bcb34f37975caf5dac59fad412d6e",
-                "reference": "b99e6c93008bcb34f37975caf5dac59fad412d6e",
+                "url": "https://api.github.com/repos/php-service-bus/storage-sql/zipball/280228b8ed61897dc106a1f1aaca4d20b42dd240",
+                "reference": "280228b8ed61897dc106a1f1aaca4d20b42dd240",
                 "shasum": ""
             },
             "require": {
@@ -1511,7 +1511,7 @@
             },
             "require-dev": {
                 "doctrine/dbal": "^v2.6",
-                "phpunit/phpunit": "^7",
+                "phpunit/phpunit": "^8",
                 "vimeo/psalm": "^3"
             },
             "type": "library",
@@ -1545,7 +1545,7 @@
                 "postgresql",
                 "sql"
             ],
-            "time": "2019-02-11 14:32:34"
+            "time": "2019-02-15 09:36:30"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -1764,40 +1764,40 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "6.1.4",
+            "version": "7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "807e6013b00af69b6c5d9ceb4282d0393dbb9d8d"
+                "reference": "4832739a02c418397e404da6c3e4fe680b7a4de7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/807e6013b00af69b6c5d9ceb4282d0393dbb9d8d",
-                "reference": "807e6013b00af69b6c5d9ceb4282d0393dbb9d8d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/4832739a02c418397e404da6c3e4fe680b7a4de7",
+                "reference": "4832739a02c418397e404da6c3e4fe680b7a4de7",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-xmlwriter": "*",
-                "php": "^7.1",
-                "phpunit/php-file-iterator": "^2.0",
+                "php": "^7.2",
+                "phpunit/php-file-iterator": "^2.0.2",
                 "phpunit/php-text-template": "^1.2.1",
-                "phpunit/php-token-stream": "^3.0",
+                "phpunit/php-token-stream": "^3.0.1",
                 "sebastian/code-unit-reverse-lookup": "^1.0.1",
-                "sebastian/environment": "^3.1 || ^4.0",
+                "sebastian/environment": "^4.1",
                 "sebastian/version": "^2.0.1",
                 "theseer/tokenizer": "^1.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.0"
+                "phpunit/phpunit": "^8.0"
             },
             "suggest": {
-                "ext-xdebug": "^2.6.0"
+                "ext-xdebug": "^2.6.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.1-dev"
+                    "dev-master": "7.0-dev"
                 }
             },
             "autoload": {
@@ -1823,7 +1823,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-10-31 16:06:48"
+            "time": "2019-02-01 07:29:14"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2016,16 +2016,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.4",
+            "version": "8.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0"
+                "reference": "d64e502503bcfab5d46c0b74ffd41f4986831dc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2896657da5fb237bc316bdfc18c2650efeee0dc0",
-                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d64e502503bcfab5d46c0b74ffd41f4986831dc7",
+                "reference": "d64e502503bcfab5d46c0b74ffd41f4986831dc7",
                 "shasum": ""
             },
             "require": {
@@ -2035,26 +2035,24 @@
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
                 "ext-xml": "*",
+                "ext-xmlwriter": "*",
                 "myclabs/deep-copy": "^1.7",
                 "phar-io/manifest": "^1.0.2",
                 "phar-io/version": "^2.0",
-                "php": "^7.1",
+                "php": "^7.2",
                 "phpspec/prophecy": "^1.7",
-                "phpunit/php-code-coverage": "^6.0.7",
+                "phpunit/php-code-coverage": "^7.0",
                 "phpunit/php-file-iterator": "^2.0.1",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^2.0",
                 "sebastian/comparator": "^3.0",
                 "sebastian/diff": "^3.0",
-                "sebastian/environment": "^4.0",
+                "sebastian/environment": "^4.1",
                 "sebastian/exporter": "^3.1",
-                "sebastian/global-state": "^2.0",
+                "sebastian/global-state": "^3.0",
                 "sebastian/object-enumerator": "^3.0.3",
                 "sebastian/resource-operations": "^2.0",
                 "sebastian/version": "^2.0.1"
-            },
-            "conflict": {
-                "phpunit/phpunit-mock-objects": "*"
             },
             "require-dev": {
                 "ext-pdo": "*"
@@ -2070,7 +2068,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.5-dev"
+                    "dev-master": "8.0-dev"
                 }
             },
             "autoload": {
@@ -2096,7 +2094,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-02-07 14:15:04"
+            "time": "2019-02-07 14:17:09"
         },
         {
             "name": "psr/log",
@@ -2432,23 +2430,26 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "e8ba02eed7bbbb9e59e43dedd3dddeff4a56b0c4"
+                "reference": "edf8a461cf1d4005f19fb0b6b8b95a9f7fa0adc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/e8ba02eed7bbbb9e59e43dedd3dddeff4a56b0c4",
-                "reference": "e8ba02eed7bbbb9e59e43dedd3dddeff4a56b0c4",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/edf8a461cf1d4005f19fb0b6b8b95a9f7fa0adc4",
+                "reference": "edf8a461cf1d4005f19fb0b6b8b95a9f7fa0adc4",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": "^7.2",
+                "sebastian/object-reflector": "^1.1.1",
+                "sebastian/recursion-context": "^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.0"
+                "ext-dom": "*",
+                "phpunit/phpunit": "^8.0"
             },
             "suggest": {
                 "ext-uopz": "*"
@@ -2456,7 +2457,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -2479,7 +2480,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2017-04-27 15:39:26"
+            "time": "2019-02-01 05:30:01"
         },
         {
             "name": "sebastian/object-enumerator",

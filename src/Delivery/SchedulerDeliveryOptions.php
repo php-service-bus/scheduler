@@ -30,17 +30,17 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     private $traceId;
 
     /**
-     * @param string|int|null                 $traceId
-     * @param array<string, string|int|float> $headers
+     * @param string|int|null $traceId
+     * @param int             $delay
      *
      * @return self
      */
-    public static function scheduledMessage($traceId, array $headers): self
+    public static function scheduledMessage($traceId, int $delay): self
     {
         $self = new self();
 
-        $self->traceId = $traceId;
-        $self->headers = $headers;
+        $self->traceId            = $traceId;
+        $self->headers['x-delay'] = $delay;
 
         return $self;
     }
@@ -84,6 +84,30 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     public function headers(): array
     {
         return $this->headers;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isPersistent(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isHighestPriority(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function expirationAfter(): ?int
+    {
+        return null;
     }
 
     private function __construct()
