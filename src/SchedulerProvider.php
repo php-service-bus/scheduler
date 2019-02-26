@@ -15,7 +15,6 @@ namespace ServiceBus\Scheduler;
 use function Amp\call;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
-use ServiceBus\Common\Messages\Command;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
@@ -52,7 +51,7 @@ final class SchedulerProvider
      * @noinspection PhpDocRedundantThrowsInspection
      *
      * @param ScheduledOperationId $id
-     * @param Command              $command
+     * @param object               $command
      * @param \DateTimeImmutable   $executionDate
      * @param ServiceBusContext    $context
      *
@@ -64,7 +63,7 @@ final class SchedulerProvider
      */
     public function schedule(
         ScheduledOperationId $id,
-        Command $command,
+        object $command,
         \DateTimeImmutable $executionDate,
         ServiceBusContext $context
     ): Promise

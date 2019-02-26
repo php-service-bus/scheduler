@@ -20,7 +20,8 @@ use ServiceBus\Common\Endpoint\DeliveryOptions;
 final class SchedulerDeliveryOptions implements DeliveryOptions
 {
     /**
-     * @var array<string, string|int|float>
+     * @psalm-var array<string, string|int|float>
+     * @var array
      */
     private $headers = [];
 

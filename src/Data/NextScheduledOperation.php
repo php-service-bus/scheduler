@@ -40,12 +40,14 @@ final class NextScheduledOperation
     public $time;
 
     /**
-     * @param array<string, string> $row
+     * @psalm-param array<string, string> $row
+     *
+     * @param array $row
      *
      * @return self
      *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
-     * @throws \ServiceBus\Common\Exceptions\DateTime\CreateDateTimeFailed
+     * @throws \ServiceBus\Common\Exceptions\DateTimeException
      */
     public static function fromRow(array $row): self
     {

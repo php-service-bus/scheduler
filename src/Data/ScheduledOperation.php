@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace ServiceBus\Scheduler\Data;
 
 use function ServiceBus\Common\datetimeInstantiator;
-use ServiceBus\Common\Messages\Command;
 use ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate;
 use ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
@@ -24,7 +23,7 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  * @internal
  *
  * @property-read ScheduledOperationId $id
- * @property-read Command              $command
+ * @property-read object               $command
  * @property-read \DateTimeImmutable   $date
  * @property-read bool                 $isSent
  */
@@ -40,7 +39,7 @@ final class ScheduledOperation
     /**
      * Scheduled message
      *
-     * @var Command
+     * @var object
      */
     public $command;
 
@@ -60,14 +59,14 @@ final class ScheduledOperation
 
     /**
      * @param ScheduledOperationId $id
-     * @param Command              $command
+     * @param object               $command
      * @param \DateTimeImmutable   $dateTime
      *
      * @return ScheduledOperation
      *
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      */
-    public static function new(ScheduledOperationId $id, Command $command, \DateTimeImmutable $dateTime): self
+    public static function new(ScheduledOperationId $id, object $command, \DateTimeImmutable $dateTime): self
     {
         self::validateDatetime($dateTime);
 
@@ -81,7 +80,7 @@ final class ScheduledOperation
      *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
-     * @throws \ServiceBus\Common\Exceptions\DateTime\CreateDateTimeFailed
+     * @throws \ServiceBus\Common\Exceptions\DateTimeException
      */
     public static function restoreFromRow(array $data): self
     {
@@ -92,10 +91,10 @@ final class ScheduledOperation
 
         if(true === \is_string($serializedCommand))
         {
-            /** @var Command|false $command */
+            /** @var object|false $command */
             $command = \unserialize($serializedCommand, ['allowed_classes' => true]);
 
-            if($command instanceof Command)
+            if(true === \is_object($command))
             {
                 return new self(
                     ScheduledOperationId::restore($data['id']),
@@ -111,11 +110,11 @@ final class ScheduledOperation
 
     /**
      * @param ScheduledOperationId $id
-     * @param Command              $command
+     * @param object               $command
      * @param \DateTimeImmutable   $dateTime
      * @param bool                 $isSent
      */
-    private function __construct(ScheduledOperationId $id, Command $command, \DateTimeImmutable $dateTime, bool $isSent = false)
+    private function __construct(ScheduledOperationId $id, object $command, \DateTimeImmutable $dateTime, bool $isSent = false)
     {
         $this->id      = $id;
         $this->command = $command;

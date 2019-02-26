@@ -233,7 +233,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
-         * @var array<string, string>|null $result
+         * @psalm-var      array<string, string>|null $result
          */
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
@@ -315,7 +315,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
             yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
-        /** @var array{processing_date:string, command:string, id:string, is_sent:bool}|null $result */
+        /** @psalm-var array{processing_date:string, command:string, id:string, is_sent:bool}|null $result */
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
 
@@ -356,7 +356,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
-         * @noinspection PhpUnhandledExceptionInspection
+         * @noinspection   PhpUnhandledExceptionInspection
          */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
     }

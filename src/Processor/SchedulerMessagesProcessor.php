@@ -16,7 +16,6 @@ use Amp\Failure;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Common\MessageExecutor\MessageExecutor;
-use ServiceBus\Common\Messages\Message;
 use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
@@ -46,7 +45,7 @@ final class SchedulerMessagesProcessor implements MessageExecutor
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @param Message           $message
+     * @param object            $message
      * @param ServiceBusContext $context
      *
      * @return Promise
@@ -54,7 +53,7 @@ final class SchedulerMessagesProcessor implements MessageExecutor
      * @throws \LogicException Unsupported message type specified
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
      */
-    public function __invoke(Message $message, ServiceBusContext $context): Promise
+    public function __invoke(object $message, ServiceBusContext $context): Promise
     {
         if($message instanceof EmitSchedulerOperation)
         {

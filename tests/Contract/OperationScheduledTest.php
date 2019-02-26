@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace ServiceBus\Scheduler\Tests\Contract;
 
 use PHPUnit\Framework\TestCase;
-use ServiceBus\Common\Messages\Command;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
@@ -32,7 +31,7 @@ final class OperationScheduledTest extends TestCase
      */
     public function create(): void
     {
-        $command = new class implements Command
+        $command = new class
         {
 
         };

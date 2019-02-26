@@ -17,16 +17,16 @@ use Amp\Success;
 use Psr\Log\LogLevel;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Common\Endpoint\DeliveryOptions;
-use ServiceBus\Common\Messages\Message;
 use function ServiceBus\Common\uuid;
 
 /**
- * @property-read Message[] $messages
+ * @property-read object[] $messages
  */
 final class Context implements ServiceBusContext
 {
     /**
-     * @var array<array-key, \ServiceBus\Common\Messages\Message>
+     * @psalm-var array<array-key, \ServiceBus\Common\Messages\Message>
+     * @var object[]
      */
     public $messages = [];
 
@@ -49,7 +49,7 @@ final class Context implements ServiceBusContext
     /**
      * @inheritDoc
      */
-    public function delivery(Message $message, ?DeliveryOptions $deliveryOptions = null): Promise
+    public function delivery(object $message, ?DeliveryOptions $deliveryOptions = null): Promise
     {
         $this->messages[] = $message;
 

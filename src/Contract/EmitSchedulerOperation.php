@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Contract;
 
-use ServiceBus\Common\Messages\Command;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
@@ -22,7 +21,7 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @property-read ScheduledOperationId $id
  */
-final class EmitSchedulerOperation implements Command
+final class EmitSchedulerOperation
 {
     /**
      * Scheduled operation identifier

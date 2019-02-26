@@ -12,8 +12,6 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Contract;
 
-use ServiceBus\Common\Messages\Command;
-use ServiceBus\Common\Messages\Event;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
@@ -25,7 +23,7 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  * @property-read \DateTimeImmutable          $executionDate
  * @property-read NextScheduledOperation|null $nextOperation
  */
-final class OperationScheduled implements Event
+final class OperationScheduled
 {
     /**
      * Operation identifier
@@ -37,6 +35,7 @@ final class OperationScheduled implements Event
     /**
      * Command namespace
      *
+     * @psalm-var class-string
      * @var string
      */
     public $commandNamespace;
@@ -57,7 +56,7 @@ final class OperationScheduled implements Event
 
     /**
      * @param ScheduledOperationId        $id
-     * @param Command                     $command ,
+     * @param object                      $command ,
      * @param \DateTimeImmutable          $executionDate
      * @param NextScheduledOperation|null $nextOperation
      *
@@ -65,7 +64,7 @@ final class OperationScheduled implements Event
      */
     public static function create(
         ScheduledOperationId $id,
-        Command $command,
+        object $command,
         \DateTimeImmutable $executionDate,
         ?NextScheduledOperation $nextOperation
     ): self
@@ -84,6 +83,8 @@ final class OperationScheduled implements Event
     }
 
     /**
+     * @psalm-param class-string $commandNamespace
+     *
      * @param ScheduledOperationId        $id
      * @param string                      $commandNamespace
      * @param \DateTimeImmutable          $executionDate

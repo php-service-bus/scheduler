@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Contract;
 
-use ServiceBus\Common\Messages\Event;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
@@ -24,7 +23,7 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  * @property-read ScheduledOperationId        $id
  * @property-read NextScheduledOperation|null $nextOperation
  */
-final class SchedulerOperationEmitted implements Event
+final class SchedulerOperationEmitted
 {
     /**
      * Scheduled operation identifier
