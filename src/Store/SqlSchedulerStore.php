@@ -62,7 +62,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 /** @var ScheduledOperation|null $operation */
                 $operation = yield from $this->load($this->adapter, $id);
 
-                if(null === $operation)
+                if (null === $operation)
                 {
                     throw new ScheduledOperationNotFound(
                         \sprintf('Operation with ID "%s" not found', $id)
@@ -88,7 +88,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
                     yield $transaction->commit();
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     yield $transaction->rollback();
 
@@ -132,7 +132,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
                     yield $transaction->commit();
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     yield $transaction->rollback();
 
@@ -193,7 +193,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
                     yield $transaction->commit();
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     yield $transaction->rollback();
 
@@ -248,12 +248,12 @@ final class SqlSchedulerStore implements SchedulerStore
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
 
-        if(true === \is_array($result) && 0 !== \count($result))
+        if (true === \is_array($result) && 0 !== \count($result))
         {
             /** @var int $affectedRows */
             $affectedRows = yield from $this->updateBarrierFlag($queryExecutor, $result['id']);
 
-            if(0 !== $affectedRows)
+            if (0 !== $affectedRows)
             {
                 /** @noinspection PhpUnhandledExceptionInspection */
                 return NextScheduledOperation::fromRow($result);
@@ -334,9 +334,9 @@ final class SqlSchedulerStore implements SchedulerStore
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
 
-        if(true === \is_array($result) && 0 !== \count($result))
+        if (true === \is_array($result) && 0 !== \count($result))
         {
-            if($queryExecutor instanceof BinaryDataDecoder)
+            if ($queryExecutor instanceof BinaryDataDecoder)
             {
                 $result['command'] = $queryExecutor->unescapeBinary($result['command']);
             }

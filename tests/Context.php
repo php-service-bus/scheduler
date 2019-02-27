@@ -48,7 +48,7 @@ final class Context implements ServiceBusContext
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function headers(): array
     {
