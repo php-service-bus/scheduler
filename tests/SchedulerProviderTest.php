@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace ServiceBus\Scheduler\Tests;
 
 use function Amp\Promise\wait;
+use function ServiceBus\Storage\Sql\fetchOne;
 use PHPUnit\Framework\TestCase;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
@@ -25,7 +26,6 @@ use ServiceBus\Scheduler\Store\SqlSchedulerStore;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\StorageConfiguration;
 use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;
-use function ServiceBus\Storage\Sql\fetchOne;
 
 /**
  *
@@ -48,9 +48,9 @@ final class SchedulerProviderTest extends TestCase
     private $provider;
 
     /**
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public static function setUpBeforeClass(): void
     {
@@ -64,9 +64,9 @@ final class SchedulerProviderTest extends TestCase
     }
 
     /**
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public static function tearDownAfterClass(): void
     {
@@ -76,11 +76,11 @@ final class SchedulerProviderTest extends TestCase
     }
 
     /**
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -89,9 +89,9 @@ final class SchedulerProviderTest extends TestCase
     }
 
     /**
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     protected function tearDown(): void
     {
@@ -105,9 +105,9 @@ final class SchedulerProviderTest extends TestCase
     /**
      * @test
      *
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function scheduleWithWrongDate(): void
     {
@@ -117,7 +117,7 @@ final class SchedulerProviderTest extends TestCase
         wait(
             $this->provider->schedule(
                 ScheduledOperationId::new(),
-                new EmptyCommand,
+                new EmptyCommand(),
                 new \DateTimeImmutable('-1 days'),
                 new Context()
             )
@@ -127,9 +127,9 @@ final class SchedulerProviderTest extends TestCase
     /**
      * @test
      *
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function successSchedule(): void
     {
@@ -138,7 +138,7 @@ final class SchedulerProviderTest extends TestCase
         wait(
             $this->provider->schedule(
                 ScheduledOperationId::new(),
-                new EmptyCommand,
+                new EmptyCommand(),
                 new \DateTimeImmutable('+1 days'),
                 $context
             )
@@ -157,9 +157,9 @@ final class SchedulerProviderTest extends TestCase
     /**
      * @test
      *
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function scheduleDuplicateOperation(): void
     {
@@ -171,7 +171,7 @@ final class SchedulerProviderTest extends TestCase
         wait(
             $this->provider->schedule(
                 $id,
-                new EmptyCommand,
+                new EmptyCommand(),
                 new \DateTimeImmutable('+1 days'),
                 $context
             )
@@ -180,7 +180,7 @@ final class SchedulerProviderTest extends TestCase
         wait(
             $this->provider->schedule(
                 $id,
-                new EmptyCommand,
+                new EmptyCommand(),
                 new \DateTimeImmutable('+1 days'),
                 $context
             )
@@ -190,9 +190,9 @@ final class SchedulerProviderTest extends TestCase
     /**
      * @test
      *
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function cancelScheduledOperation(): void
     {
@@ -202,7 +202,7 @@ final class SchedulerProviderTest extends TestCase
         wait(
             $this->provider->schedule(
                 $id,
-                new EmptyCommand,
+                new EmptyCommand(),
                 new \DateTimeImmutable('+1 days'),
                 $context
             )
@@ -222,15 +222,15 @@ final class SchedulerProviderTest extends TestCase
         $resultSet  = wait(self::$adapter->execute('SELECT count(id) as cnt from scheduler_registry'));
         $operations = wait(fetchOne($resultSet));
 
-        static::assertEquals(0, $operations['cnt']);
+        static::assertSame(0, (int) $operations['cnt']);
     }
 
     /**
      * @test
      *
-     * @return void
-     *
      * @throws \Throwable
+     *
+     * @return void
      */
     public function cancelUnknownOperation(): void
     {

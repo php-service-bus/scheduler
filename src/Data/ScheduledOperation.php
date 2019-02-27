@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -18,7 +18,7 @@ use ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
- * Scheduled job data
+ * Scheduled job data.
  *
  * @internal
  *
@@ -30,28 +30,28 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 final class ScheduledOperation
 {
     /**
-     * Identifier
+     * Identifier.
      *
      * @var ScheduledOperationId
      */
     public $id;
 
     /**
-     * Scheduled message
+     * Scheduled message.
      *
      * @var object
      */
     public $command;
 
     /**
-     * Execution date
+     * Execution date.
      *
      * @var \DateTimeImmutable
      */
     public $date;
 
     /**
-     * The message was sent to the transport
+     * The message was sent to the transport.
      *
      * @var bool
      */
@@ -62,9 +62,10 @@ final class ScheduledOperation
      * @param object               $command
      * @param \DateTimeImmutable   $dateTime
      *
+     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
+     *
      * @return ScheduledOperation
      *
-     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      */
     public static function new(ScheduledOperationId $id, object $command, \DateTimeImmutable $dateTime): self
     {
@@ -76,11 +77,12 @@ final class ScheduledOperation
     /**
      * @param array{processing_date:string, command:string, id:string, is_sent:bool} $data
      *
-     * @return self
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Common\Exceptions\DateTimeException
+     *
+     * @return self
+     *
      */
     public static function restoreFromRow(array $data): self
     {
@@ -89,12 +91,12 @@ final class ScheduledOperation
 
         $serializedCommand = \base64_decode($data['command']);
 
-        if(true === \is_string($serializedCommand))
+        if (true === \is_string($serializedCommand))
         {
-            /** @var object|false $command */
+            /** @var false|object $command */
             $command = \unserialize($serializedCommand, ['allowed_classes' => true]);
 
-            if(true === \is_object($command))
+            if (true === \is_object($command))
             {
                 return new self(
                     ScheduledOperationId::restore($data['id']),
@@ -125,9 +127,10 @@ final class ScheduledOperation
     /**
      * @param \DateTimeImmutable $dateTime
      *
+     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
+     *
      * @return void
      *
-     * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      */
     private static function validateDatetime(\DateTimeImmutable $dateTime): void
     {
@@ -136,17 +139,19 @@ final class ScheduledOperation
             /** @var \DateTimeImmutable $currentDate */
             $currentDate = datetimeInstantiator('NOW');
 
-            if($currentDate >= $dateTime)
+            if ($currentDate >= $dateTime)
             {
                 throw new \InvalidArgumentException(
                     'The date of the scheduled task should be greater than the current one'
                 );
             }
         }
-        catch(\Throwable $throwable)
+        catch (\Throwable $throwable)
         {
             throw new InvalidScheduledOperationExecutionDate(
-                $throwable->getMessage(), (int) $throwable->getCode(), $throwable
+                $throwable->getMessage(),
+                (int) $throwable->getCode(),
+                $throwable
             );
         }
     }

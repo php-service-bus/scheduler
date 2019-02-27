@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -21,17 +21,18 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
 {
     /**
      * @psalm-var array<string, string|int|float>
+     *
      * @var array
      */
     private $headers = [];
 
     /**
-     * @var string|int|null
+     * @var int|string|null
      */
     private $traceId;
 
     /**
-     * @param string|int|null $traceId
+     * @param int|string|null $traceId
      * @param int             $delay
      *
      * @return self
@@ -47,7 +48,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function create(): DeliveryOptions
     {
@@ -55,7 +56,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function withTraceId($traceId): void
     {
@@ -63,7 +64,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function withHeader(string $key, $value): void
     {
@@ -72,7 +73,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function traceId()
     {
@@ -80,7 +81,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function headers(): array
     {
@@ -88,7 +89,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isPersistent(): bool
     {
@@ -96,7 +97,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isHighestPriority(): bool
     {
@@ -104,7 +105,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function expirationAfter(): ?int
     {
@@ -113,6 +114,5 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
 
     private function __construct()
     {
-
     }
 }

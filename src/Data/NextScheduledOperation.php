@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -16,7 +16,7 @@ use function ServiceBus\Common\datetimeInstantiator;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
- * Scheduled job data (for next job)
+ * Scheduled job data (for next job).
  *
  * @internal
  *
@@ -26,14 +26,14 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 final class NextScheduledOperation
 {
     /**
-     * Job identifier
+     * Job identifier.
      *
      * @var ScheduledOperationId
      */
     public $id;
 
     /**
-     * Next operation date
+     * Next operation date.
      *
      * @var \DateTimeImmutable
      */
@@ -44,10 +44,11 @@ final class NextScheduledOperation
      *
      * @param array $row
      *
-     * @return self
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Common\Exceptions\DateTimeException
+     *
+     * @return self
+     *
      */
     public static function fromRow(array $row): self
     {

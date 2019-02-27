@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -13,17 +13,17 @@ declare(strict_types = 1);
 namespace ServiceBus\Scheduler\Emitter;
 
 use function Amp\call;
+use function ServiceBus\Common\datetimeInstantiator;
 use Amp\Promise;
 use Psr\Log\LogLevel;
 use ServiceBus\Common\Context\ServiceBusContext;
-use function ServiceBus\Common\datetimeInstantiator;
 use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
 use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
-use ServiceBus\Scheduler\Exceptions\EmitFailed;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\Data\ScheduledOperation;
-use ServiceBus\Scheduler\ScheduledOperationId;
 use ServiceBus\Scheduler\Delivery\SchedulerDeliveryOptions;
+use ServiceBus\Scheduler\Exceptions\EmitFailed;
+use ServiceBus\Scheduler\ScheduledOperationId;
 use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Scheduler\Store\SchedulerStore;
 
@@ -46,7 +46,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise
     {
@@ -58,7 +58,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 {
                     yield $this->store->extract($id, $this->createPostExtract($context));
                 }
-                catch(ScheduledOperationNotFound $exception)
+                catch (ScheduledOperationNotFound $exception)
                 {
                     $context->logContextThrowable($exception);
 
@@ -66,7 +66,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                         SchedulerOperationEmitted::create($id)
                     );
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
@@ -76,7 +76,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise
     {
@@ -86,7 +86,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
             {
                 try
                 {
-                    if(null === $nextOperation)
+                    if (null === $nextOperation)
                     {
                         $context->logContextMessage('Next operation not specified', [], LogLevel::DEBUG);
 
@@ -103,13 +103,14 @@ final class RabbitMQEmitter implements SchedulerEmitter
                     );
 
                     $context->logContextMessage(
-                        'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds', [
+                        'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds',
+                        [
                             'scheduledOperationId'    => $id,
-                            'scheduledOperationDelay' => $delay / 1000
+                            'scheduledOperationDelay' => $delay / 1000,
                         ]
                     );
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
@@ -127,15 +128,16 @@ final class RabbitMQEmitter implements SchedulerEmitter
     {
         return function(?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
         {
-            if(null !== $operation)
+            if (null !== $operation)
             {
                 $context->delivery($operation->command)->onResolve(
                     static function() use ($operation, $nextOperation, $context): \Generator
                     {
                         $context->logContextMessage(
-                            'The delayed "{messageClass}" command has been sent to the transport', [
+                            'The delayed "{messageClass}" command has been sent to the transport',
+                            [
                                 'messageClass'         => \get_class($operation->command),
-                                'scheduledOperationId' => (string) $operation->id
+                                'scheduledOperationId' => (string) $operation->id,
                             ]
                         );
 
@@ -147,7 +149,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     }
 
     /**
-     * Calculate next execution delay
+     * Calculate next execution delay.
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
@@ -159,6 +161,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     {
         /**
          * @noinspection PhpUnhandledExceptionInspection
+         *
          * @var \DateTimeImmutable $currentDate
          */
         $currentDate = datetimeInstantiator('NOW');

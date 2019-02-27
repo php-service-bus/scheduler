@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -25,15 +25,15 @@ final class OperationScheduledTest extends TestCase
     /**
      * @test
      *
+     * @throws \Throwable
+     *
      * @return void
      *
-     * @throws \Throwable
      */
     public function create(): void
     {
-        $command = new class
+        $command = new class()
         {
-
         };
 
         $id       = ScheduledOperationId::restore('qwerty');
@@ -44,12 +44,12 @@ final class OperationScheduledTest extends TestCase
 
         static::assertNotNull($operation->nextOperation);
 
-        static::assertEquals($id, $operation->id);
-        static::assertEquals($id, $operation->nextOperation->id);
+        static::assertSame($id, $operation->id);
+        static::assertSame($id, $operation->nextOperation->id);
 
-        static::assertEquals($dateTime->format('c'), $operation->executionDate->format('c'));
-        static::assertEquals($dateTime->format('c'), $operation->nextOperation->time->format('c'));
+        static::assertSame($dateTime->format('c'), $operation->executionDate->format('c'));
+        static::assertSame($dateTime->format('c'), $operation->nextOperation->time->format('c'));
 
-        static::assertEquals(\get_class($command), $operation->commandNamespace);
+        static::assertSame(\get_class($command), $operation->commandNamespace);
     }
 }

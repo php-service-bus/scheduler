@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -16,7 +16,7 @@ use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
- * Scheduler operation emitted
+ * Scheduler operation emitted.
  *
  * @see EmitSchedulerOperation
  *
@@ -26,14 +26,14 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 final class SchedulerOperationEmitted
 {
     /**
-     * Scheduled operation identifier
+     * Scheduled operation identifier.
      *
      * @var ScheduledOperationId
      */
     public $id;
 
     /**
-     * Next operation data
+     * Next operation data.
      *
      * @var NextScheduledOperation|null
      */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -24,30 +24,30 @@ interface SchedulerEmitter
 {
     /**
      * Emit operation (send scheduled command to destination queue)
-     * Deletes the task from the database (@see SchedulerStore::extract()) after the event is sent
+     * Deletes the task from the database (@see SchedulerStore::extract()) after the event is sent.
      *
      * @see SchedulerOperationEmitted event
      *
      * @param ScheduledOperationId $id
      * @param ServiceBusContext    $context
      *
-     * @return Promise
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
+     *
+     * @return Promise
      */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise;
 
     /**
-     * Emit next operation
+     * Emit next operation.
      *
      * @see EmitSchedulerOperation command
      *
      * @param NextScheduledOperation|null $nextOperation
      * @param ServiceBusContext           $context
      *
-     * @return Promise
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
+     *
+     * @return Promise
      */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise;
 }

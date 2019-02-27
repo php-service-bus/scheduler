@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -16,7 +16,7 @@ use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
- * Scheduler operation canceled
+ * Scheduler operation canceled.
  *
  * @property-read ScheduledOperationId        $id
  * @property-read string|null                 $reason
@@ -25,21 +25,21 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 final class SchedulerOperationCanceled
 {
     /**
-     * Operation identifier
+     * Operation identifier.
      *
      * @var ScheduledOperationId
      */
     public $id;
 
     /**
-     * Reason
+     * Reason.
      *
      * @var string|null
      */
     public $reason;
 
     /**
-     * Next operation data
+     * Next operation data.
      *
      * @var NextScheduledOperation|null
      */
@@ -56,8 +56,7 @@ final class SchedulerOperationCanceled
         ScheduledOperationId $id,
         ?string $reason,
         ?NextScheduledOperation $nextScheduledOperation = null
-    ): self
-    {
+    ): self {
         return new self($id, $reason, $nextScheduledOperation);
     }
 

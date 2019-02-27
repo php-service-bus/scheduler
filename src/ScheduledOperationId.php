@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -36,13 +36,13 @@ final class ScheduledOperationId
     /**
      * @param string $value
      *
-     * @return ScheduledOperationId
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
+     *
+     * @return ScheduledOperationId
      */
     public static function restore(string $value): self
     {
-        if('' === $value)
+        if ('' === $value)
         {
             throw new EmptyScheduledOperationIdentifierNotAllowed('Scheduled operation ID can\'t be empty');
         }

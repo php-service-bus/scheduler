@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -23,7 +23,7 @@ use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
 use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
 
 /**
- * Scheduler listener\command handler
+ * Scheduler listener\command handler.
  */
 final class SchedulerMessagesProcessor implements MessageExecutor
 {
@@ -41,32 +41,31 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     }
 
     /**
-     * Execute message
+     * Execute message.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
      * @param object            $message
      * @param ServiceBusContext $context
      *
-     * @return Promise
-     *
      * @throws \LogicException Unsupported message type specified
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
+     *
+     * @return Promise
      */
     public function __invoke(object $message, ServiceBusContext $context): Promise
     {
-        if($message instanceof EmitSchedulerOperation)
+        if ($message instanceof EmitSchedulerOperation)
         {
             return $this->emitter->emit($message->id, $context);
         }
 
-        if(
+        if (
             true === ($message instanceof SchedulerOperationEmitted) ||
             true === ($message instanceof SchedulerOperationCanceled) ||
             true === ($message instanceof OperationScheduled)
-        )
-        {
-            /** @var SchedulerOperationEmitted|SchedulerOperationCanceled|OperationScheduled $message */
+        ) {
+            /** @var OperationScheduled|SchedulerOperationCanceled|SchedulerOperationEmitted $message */
 
             return $this->emitter->emitNextOperation($message->nextOperation, $context);
         }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -26,7 +26,7 @@ use ServiceBus\Scheduler\Store\SchedulerStore;
 use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
 
 /**
- * Scheduler provider
+ * Scheduler provider.
  *
  * @api
  */
@@ -46,7 +46,7 @@ final class SchedulerProvider
     }
 
     /**
-     * Schedule command execution
+     * Schedule command execution.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -55,19 +55,18 @@ final class SchedulerProvider
      * @param \DateTimeImmutable   $executionDate
      * @param ServiceBusContext    $context
      *
-     * @return Promise Doesn't return result
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      * @throws \ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation
      * @throws \ServiceBus\Scheduler\Exceptions\OperationSchedulingError
+     *
+     * @return Promise Doesn't return result
      */
     public function schedule(
         ScheduledOperationId $id,
         object $command,
         \DateTimeImmutable $executionDate,
         ServiceBusContext $context
-    ): Promise
-    {
+    ): Promise {
         /** @psalm-suppress InvalidArgument */
         return call(
             function(ScheduledOperation $operation) use ($context): \Generator
@@ -76,13 +75,15 @@ final class SchedulerProvider
                 {
                     yield $this->store->add($operation, self::createPostAdd($context));
 
-                    $context->logContextMessage('Operation "{messageClass}" successfully scheduled for {executionDate}', [
+                    $context->logContextMessage(
+                        'Operation "{messageClass}" successfully scheduled for {executionDate}',
+                        [
                             'messageClass'  => \get_class($operation->command),
-                            'executionDate' => $operation->date->format('Y-m-d H:i:s')
+                            'executionDate' => $operation->date->format('Y-m-d H:i:s'),
                         ]
                     );
                 }
-                catch(UniqueConstraintViolationCheckFailed $exception)
+                catch (UniqueConstraintViolationCheckFailed $exception)
                 {
                     throw new DuplicateScheduledOperation(
                         \sprintf('Job with ID "%s" already exists', $operation->id),
@@ -90,7 +91,7 @@ final class SchedulerProvider
                         $exception
                     );
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     throw new OperationSchedulingError($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
@@ -100,7 +101,7 @@ final class SchedulerProvider
     }
 
     /**
-     * Cancel scheduled job
+     * Cancel scheduled job.
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
@@ -108,9 +109,9 @@ final class SchedulerProvider
      * @param ServiceBusContext    $context
      * @param string|null          $reason
      *
-     * @return Promise Doesn't return result
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation
+     *
+     * @return Promise Doesn't return result
      */
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {
@@ -122,7 +123,7 @@ final class SchedulerProvider
                 {
                     yield $this->store->remove($id, self::createPostCancel($context, $id, $reason));
                 }
-                catch(\Throwable $throwable)
+                catch (\Throwable $throwable)
                 {
                     throw new ErrorCancelingScheduledOperation(
                         $throwable->getMessage(),
@@ -131,7 +132,9 @@ final class SchedulerProvider
                     );
                 }
             },
-            $id, $context, $reason
+            $id,
+            $context,
+            $reason
         );
     }
 

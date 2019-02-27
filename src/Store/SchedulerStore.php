@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -22,45 +22,45 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 interface SchedulerStore
 {
     /**
-     * Extract operation (load and delete)
+     * Extract operation (load and delete).
      *
      * @param ScheduledOperationId $id
      * @param callable             $postExtract
-     *
-     * @return Promise
      *
      * @throws \ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
+     *
+     * @return Promise
      */
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise;
 
     /**
-     * Remove operation
+     * Remove operation.
      *
      * @param ScheduledOperationId $id
      * @param callable             $postRemove
      *
-     * @return Promise It doesn't return any result
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
+     *
+     * @return Promise It doesn't return any result
      */
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise;
 
     /**
-     * Save a new operation
+     * Save a new operation.
      *
      * @param ScheduledOperation $operation
      * @param callable           $postAdd
      *
-     * @return Promise It doesn't return any result
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
+     *
+     * @return Promise It doesn't return any result
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise;
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -24,9 +24,10 @@ final class SchedulerOperationCanceledTest extends TestCase
     /**
      * @test
      *
+     * @throws \Throwable
+     *
      * @return void
      *
-     * @throws \Throwable
      */
     public function create(): void
     {
@@ -34,8 +35,8 @@ final class SchedulerOperationCanceledTest extends TestCase
 
         $operation = SchedulerOperationCanceled::create($id, 'test');
 
-        static::assertEquals($id, $operation->id);
-        static::assertEquals('test', $operation->reason);
+        static::assertSame($id, $operation->id);
+        static::assertSame('test', $operation->reason);
         static::assertNull($operation->nextOperation);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -14,8 +14,14 @@ namespace ServiceBus\Scheduler\Store;
 
 use function Amp\asyncCall;
 use function Amp\call;
-use Amp\Promise;
 use function ServiceBus\Common\datetimeToString;
+use function ServiceBus\Storage\Sql\deleteQuery;
+use function ServiceBus\Storage\Sql\equalsCriteria;
+use function ServiceBus\Storage\Sql\fetchOne;
+use function ServiceBus\Storage\Sql\insertQuery;
+use function ServiceBus\Storage\Sql\selectQuery;
+use function ServiceBus\Storage\Sql\updateQuery;
+use Amp\Promise;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\Data\ScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
@@ -23,12 +29,6 @@ use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Storage\Common\BinaryDataDecoder;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\QueryExecutor;
-use function ServiceBus\Storage\Sql\deleteQuery;
-use function ServiceBus\Storage\Sql\equalsCriteria;
-use function ServiceBus\Storage\Sql\fetchOne;
-use function ServiceBus\Storage\Sql\insertQuery;
-use function ServiceBus\Storage\Sql\selectQuery;
-use function ServiceBus\Storage\Sql\updateQuery;
 
 /**
  *
@@ -51,7 +51,7 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise
     {
@@ -71,6 +71,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
                 /**
                  * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                 *
                  * @var \ServiceBus\Storage\Common\Transaction $transaction
                  */
                 $transaction = yield $this->adapter->transaction();
@@ -104,7 +105,7 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise
     {
@@ -114,6 +115,7 @@ final class SqlSchedulerStore implements SchedulerStore
             {
                 /**
                  * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                 *
                  * @var \ServiceBus\Storage\Common\Transaction $transaction
                  */
                 $transaction = yield $this->adapter->transaction();
@@ -147,7 +149,7 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise
     {
@@ -157,6 +159,7 @@ final class SqlSchedulerStore implements SchedulerStore
             {
                 /**
                  * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                 *
                  * @var \ServiceBus\Storage\Common\Transaction $transaction
                  */
                 $transaction = yield $this->adapter->transaction();
@@ -167,16 +170,20 @@ final class SqlSchedulerStore implements SchedulerStore
                         'id'              => (string) $operation->id,
                         'processing_date' => datetimeToString($operation->date),
                         'command'         => \base64_encode(\serialize($operation->command)),
-                        'is_sent'         => (int) $operation->isSent
+                        'is_sent'         => (int) $operation->isSent,
                     ]);
 
                     $compiledQuery = $insertQuery->compile();
 
-                    /** @psalm-suppress TooManyTemplateParams Invalid Promise template */
+                    /**
+                     * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                     * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+                     */
                     yield $transaction->execute($compiledQuery->sql(), $compiledQuery->params());
 
                     /**
                      * @psalm-suppress TooManyTemplateParams Invalid Promise template
+                     *
                      * @var NextScheduledOperation|null $nextOperation
                      */
                     $nextOperation = yield from $this->fetchNextOperation($transaction);
@@ -208,11 +215,12 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @param QueryExecutor $queryExecutor
      *
-     * @return \Generator
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
+     *
+     * @return \Generator
      */
     private function fetchNextOperation(QueryExecutor $queryExecutor): \Generator
     {
@@ -226,6 +234,8 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+         *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
@@ -252,18 +262,19 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * Update task is_sent flag
+     * Update task is_sent flag.
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
      * @param QueryExecutor $queryExecutor
      * @param string        $id
      *
-     * @return \Generator
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
+     *
+     * @return \Generator
      */
     private function updateBarrierFlag(QueryExecutor $queryExecutor, string $id): \Generator
     {
@@ -276,6 +287,8 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+         *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
@@ -285,20 +298,20 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * Load scheduled operation
+     * Load scheduled operation.
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
      * @param QueryExecutor        $queryExecutor
      * @param ScheduledOperationId $id
      *
-     * @return \Generator
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
+     *
+     * @return \Generator
      */
     private function load(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
@@ -310,6 +323,8 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+         *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
@@ -334,19 +349,19 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * Delete scheduled operation
+     * Delete scheduled operation.
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
      * @param QueryExecutor        $queryExecutor
      * @param ScheduledOperationId $id
      *
-     * @return \Generator
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\IncorrectParameterCast
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
+     *
+     * @return \Generator
      */
     private function delete(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
@@ -356,6 +371,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
+         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
          * @noinspection   PhpUnhandledExceptionInspection
          */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());

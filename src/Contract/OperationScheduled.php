@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -16,7 +16,7 @@ use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
 /**
- * Operation successful scheduled
+ * Operation successful scheduled.
  *
  * @property-read ScheduledOperationId        $id
  * @property-read string                      $commandNamespace
@@ -26,29 +26,30 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 final class OperationScheduled
 {
     /**
-     * Operation identifier
+     * Operation identifier.
      *
      * @var ScheduledOperationId
      */
     public $id;
 
     /**
-     * Command namespace
+     * Command namespace.
      *
      * @psalm-var class-string
+     *
      * @var string
      */
     public $commandNamespace;
 
     /**
-     * Execution date
+     * Execution date.
      *
      * @var \DateTimeImmutable
      */
     public $executionDate;
 
     /**
-     * Next operation data
+     * Next operation data.
      *
      * @var NextScheduledOperation|null
      */
@@ -67,13 +68,12 @@ final class OperationScheduled
         object $command,
         \DateTimeImmutable $executionDate,
         ?NextScheduledOperation $nextOperation
-    ): self
-    {
+    ): self {
         return new self($id, \get_class($command), $executionDate, $nextOperation);
     }
 
     /**
-     * Has next operation data
+     * Has next operation data.
      *
      * @return bool
      */
@@ -95,8 +95,7 @@ final class OperationScheduled
         string $commandNamespace,
         \DateTimeImmutable $executionDate,
         ?NextScheduledOperation $nextOperation
-    )
-    {
+    ) {
         $this->id               = $id;
         $this->commandNamespace = $commandNamespace;
         $this->executionDate    = $executionDate;

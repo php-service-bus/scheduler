@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduler implementation
+ * Scheduler implementation.
  *
  * @author  Maksim Masiukevich <dev@async-php.com>
  * @license MIT
@@ -17,5 +17,4 @@ namespace ServiceBus\Scheduler\Store\Exceptions;
  */
 final class ScheduledOperationNotFound extends \RuntimeException
 {
-
 }
