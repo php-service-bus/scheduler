@@ -44,7 +44,7 @@
     "doctrine/dbal": "^v2.6"
   },
   "prefer-stable": true,
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "scripts": {
     "psalm": "./vendor/bin/psalm --config=psalm.xml",
     "tests": "./vendor/bin/phpunit --configuration phpunit.xml --verbose",
