@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 /**
  * Scheduler implementation.
@@ -55,12 +55,14 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise
     {
+        $adapter = $this->adapter;
+
         /** @psalm-suppress InvalidArgument */
         return call(
-            function(ScheduledOperationId $id) use ($postExtract): \Generator
+            static function(ScheduledOperationId $id) use ($adapter, $postExtract): \Generator
             {
                 /** @var ScheduledOperation|null $operation */
-                $operation = yield from $this->load($this->adapter, $id);
+                $operation = yield from self::load($adapter, $id);
 
                 if (null === $operation)
                 {
@@ -74,14 +76,14 @@ final class SqlSchedulerStore implements SchedulerStore
                  *
                  * @var \ServiceBus\Storage\Common\Transaction $transaction
                  */
-                $transaction = yield $this->adapter->transaction();
+                $transaction = yield $adapter->transaction();
 
                 try
                 {
-                    yield from $this->delete($transaction, $id);
+                    yield from self::delete($transaction, $id);
 
                     /** @var NextScheduledOperation|null $nextOperation */
-                    $nextOperation = yield from $this->fetchNextOperation($transaction);
+                    $nextOperation = yield from self::fetchNextOperation($transaction);
 
                     /** @psalm-suppress InvalidArgument */
                     asyncCall($postExtract, $operation, $nextOperation);
@@ -109,23 +111,25 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise
     {
+        $adapter = $this->adapter;
+
         /** @psalm-suppress InvalidArgument */
         return call(
-            function(ScheduledOperationId $id) use ($postRemove): \Generator
+            static function(ScheduledOperationId $id) use ($adapter, $postRemove): \Generator
             {
                 /**
                  * @psalm-suppress TooManyTemplateParams Invalid Promise template
                  *
                  * @var \ServiceBus\Storage\Common\Transaction $transaction
                  */
-                $transaction = yield $this->adapter->transaction();
+                $transaction = yield $adapter->transaction();
 
                 try
                 {
-                    yield from $this->delete($transaction, $id);
+                    yield from self::delete($transaction, $id);
 
                     /** @var NextScheduledOperation|null $nextOperation */
-                    $nextOperation = yield from $this->fetchNextOperation($transaction);
+                    $nextOperation = yield from self::fetchNextOperation($transaction);
 
                     /** @psalm-suppress InvalidArgument */
                     asyncCall($postRemove, $nextOperation);
@@ -153,16 +157,18 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise
     {
+        $adapter = $this->adapter;
+
         /** @psalm-suppress InvalidArgument */
         return call(
-            function(ScheduledOperation $operation) use ($postAdd): \Generator
+            static function(ScheduledOperation $operation) use ($adapter, $postAdd): \Generator
             {
                 /**
                  * @psalm-suppress TooManyTemplateParams Invalid Promise template
                  *
                  * @var \ServiceBus\Storage\Common\Transaction $transaction
                  */
-                $transaction = yield $this->adapter->transaction();
+                $transaction = yield $adapter->transaction();
 
                 try
                 {
@@ -186,7 +192,7 @@ final class SqlSchedulerStore implements SchedulerStore
                      *
                      * @var NextScheduledOperation|null $nextOperation
                      */
-                    $nextOperation = yield from $this->fetchNextOperation($transaction);
+                    $nextOperation = yield from self::fetchNextOperation($transaction);
 
                     /** @psalm-suppress InvalidArgument */
                     asyncCall($postAdd, $operation, $nextOperation);
@@ -222,9 +228,13 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @return \Generator
      */
-    private function fetchNextOperation(QueryExecutor $queryExecutor): \Generator
+    private static function fetchNextOperation(QueryExecutor $queryExecutor): \Generator
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /**
+         * @noinspection PhpUnhandledExceptionInspection
+         *
+         * @var \Latitude\QueryBuilder\Query\SelectQuery $selectQuery
+         */
         $selectQuery = selectQuery(self::TABLE_NAME)
             ->where(equalsCriteria('is_sent', 0))
             ->orderBy('processing_date', 'ASC')
@@ -251,7 +261,7 @@ final class SqlSchedulerStore implements SchedulerStore
         if (true === \is_array($result) && 0 !== \count($result))
         {
             /** @var int $affectedRows */
-            $affectedRows = yield from $this->updateBarrierFlag($queryExecutor, $result['id']);
+            $affectedRows = yield from self::updateBarrierFlag($queryExecutor, $result['id']);
 
             if (0 !== $affectedRows)
             {
@@ -276,9 +286,13 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @return \Generator
      */
-    private function updateBarrierFlag(QueryExecutor $queryExecutor, string $id): \Generator
+    private static function updateBarrierFlag(QueryExecutor $queryExecutor, string $id): \Generator
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /**
+         * @noinspection PhpUnhandledExceptionInspection
+         *
+         * @var \Latitude\QueryBuilder\Query\UpdateQuery $updateQuery
+         */
         $updateQuery = updateQuery(self::TABLE_NAME, ['is_sent' => 1])
             ->where(equalsCriteria('id', $id))
             ->andWhere(equalsCriteria('is_sent', 0));
@@ -313,7 +327,7 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @return \Generator
      */
-    private function load(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
+    private static function load(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
         $operation = null;
 
@@ -363,7 +377,7 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @return \Generator
      */
-    private function delete(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
+    private static function delete(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $deleteQuery   = deleteQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id));
@@ -372,7 +386,8 @@ final class SqlSchedulerStore implements SchedulerStore
         /**
          * @psalm-suppress TooManyTemplateParams Invalid Promise template
          * @psalm-suppress MixedTypeCoercion Invalid params() docblock
-         * @noinspection   PhpUnhandledExceptionInspection
+         *
+         * @noinspection PhpUnhandledExceptionInspection
          */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
     }

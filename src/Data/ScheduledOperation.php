@@ -75,7 +75,9 @@ final class ScheduledOperation
     }
 
     /**
-     * @param array{processing_date:string, command:string, id:string, is_sent:bool} $data
+     * @psalm-param array{processing_date:string, command:string, id:string, is_sent:bool} $data
+     *
+     * @param array $data
      *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed

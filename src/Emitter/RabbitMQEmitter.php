@@ -126,7 +126,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
      */
     private function createPostExtract(ServiceBusContext $context): callable
     {
-        return function(?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
+        return static function(?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
         {
             if (null !== $operation)
             {
