@@ -53,7 +53,7 @@ final class ScheduledOperationId
     /**
      * @return string
      */
-    public function __toString(): string
+    public function toString(): string
     {
         return $this->value;
     }

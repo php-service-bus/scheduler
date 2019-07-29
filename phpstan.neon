@@ -1,5 +1,1 @@
 parameters:
-	ignoreErrors:
-		-
-			message: '#expects callable#'
-			path: %currentWorkingDirectory%/src

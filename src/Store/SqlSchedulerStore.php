@@ -67,15 +67,11 @@ final class SqlSchedulerStore implements SchedulerStore
                 if (null === $operation)
                 {
                     throw new ScheduledOperationNotFound(
-                        \sprintf('Operation with ID "%s" not found', $id)
+                        \sprintf('Operation with ID "%s" not found', $id->toString())
                     );
                 }
 
-                /**
-                 * @psalm-suppress TooManyTemplateParams Invalid Promise template
-                 *
-                 * @var \ServiceBus\Storage\Common\Transaction $transaction
-                 */
+                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
                 $transaction = yield $adapter->transaction();
 
                 try
@@ -117,11 +113,7 @@ final class SqlSchedulerStore implements SchedulerStore
         return call(
             static function(ScheduledOperationId $id) use ($adapter, $postRemove): \Generator
             {
-                /**
-                 * @psalm-suppress TooManyTemplateParams Invalid Promise template
-                 *
-                 * @var \ServiceBus\Storage\Common\Transaction $transaction
-                 */
+                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
                 $transaction = yield $adapter->transaction();
 
                 try
@@ -163,17 +155,13 @@ final class SqlSchedulerStore implements SchedulerStore
         return call(
             static function(ScheduledOperation $operation) use ($adapter, $postAdd): \Generator
             {
-                /**
-                 * @psalm-suppress TooManyTemplateParams Invalid Promise template
-                 *
-                 * @var \ServiceBus\Storage\Common\Transaction $transaction
-                 */
+                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
                 $transaction = yield $adapter->transaction();
 
                 try
                 {
                     $insertQuery = insertQuery('scheduler_registry', [
-                        'id'              => (string) $operation->id,
+                        'id'              => $operation->id->toString(),
                         'processing_date' => datetimeToString($operation->date),
                         'command'         => \base64_encode(\serialize($operation->command)),
                         'is_sent'         => (int) $operation->isSent,
@@ -181,17 +169,10 @@ final class SqlSchedulerStore implements SchedulerStore
 
                     $compiledQuery = $insertQuery->compile();
 
-                    /**
-                     * @psalm-suppress TooManyTemplateParams Invalid Promise template
-                     * @psalm-suppress MixedTypeCoercion Invalid params() docblock
-                     */
+                    /** @psalm-suppress MixedTypeCoercion Invalid params() docblock */
                     yield $transaction->execute($compiledQuery->sql(), $compiledQuery->params());
 
-                    /**
-                     * @psalm-suppress TooManyTemplateParams Invalid Promise template
-                     *
-                     * @var NextScheduledOperation|null $nextOperation
-                     */
+                    /** @var NextScheduledOperation|null $nextOperation */
                     $nextOperation = yield from self::fetchNextOperation($transaction);
 
                     /** @psalm-suppress InvalidArgument */
@@ -243,7 +224,6 @@ final class SqlSchedulerStore implements SchedulerStore
         $compiledQuery = $selectQuery->compile();
 
         /**
-         * @psalm-suppress TooManyTemplateParams Invalid Promise template
          * @psalm-suppress MixedTypeCoercion Invalid params() docblock
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
@@ -251,10 +231,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
             yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
-        /**
-         * @psalm-suppress TooManyTemplateParams Invalid Promise template
-         * @psalm-var      array<string, string>|null $result
-         */
+        /** @psalm-var      array<string, string>|null $result */
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
 
@@ -300,7 +277,6 @@ final class SqlSchedulerStore implements SchedulerStore
         $compiledQuery = $updateQuery->compile();
 
         /**
-         * @psalm-suppress TooManyTemplateParams Invalid Promise template
          * @psalm-suppress MixedTypeCoercion Invalid params() docblock
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
@@ -332,11 +308,10 @@ final class SqlSchedulerStore implements SchedulerStore
         $operation = null;
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $selectQuery   = selectQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id));
+        $selectQuery   = selectQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id->toString()));
         $compiledQuery = $selectQuery->compile();
 
         /**
-         * @psalm-suppress TooManyTemplateParams Invalid Promise template
          * @psalm-suppress MixedTypeCoercion Invalid params() docblock
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
@@ -380,14 +355,13 @@ final class SqlSchedulerStore implements SchedulerStore
     private static function delete(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $deleteQuery   = deleteQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id));
+        $deleteQuery   = deleteQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id->toString()));
         $compiledQuery = $deleteQuery->compile();
 
         /**
-         * @psalm-suppress TooManyTemplateParams Invalid Promise template
          * @psalm-suppress MixedTypeCoercion Invalid params() docblock
          *
-         * @noinspection PhpUnhandledExceptionInspection
+         * @noinspection   PhpUnhandledExceptionInspection
          */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
     }

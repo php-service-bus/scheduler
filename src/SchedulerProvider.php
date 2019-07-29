@@ -86,7 +86,7 @@ final class SchedulerProvider
                 catch (UniqueConstraintViolationCheckFailed $exception)
                 {
                     throw new DuplicateScheduledOperation(
-                        \sprintf('Job with ID "%s" already exists', $operation->id),
+                        \sprintf('Job with ID "%s" already exists', $operation->id->toString()),
                         (int) $exception->getCode(),
                         $exception
                     );

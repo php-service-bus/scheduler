@@ -68,6 +68,16 @@ final class Context implements ServiceBusContext
     /**
      * {@inheritdoc}
      */
+    public function return(object $message, int $secondsDelay = 3): Promise
+    {
+        $this->messages[] = $message;
+
+        return new Success();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function logContextMessage(string $logMessage, array $extra = [], string $level = LogLevel::INFO): void
     {
     }
@@ -75,7 +85,7 @@ final class Context implements ServiceBusContext
     /**
      * {@inheritdoc}
      */
-    public function logContextThrowable(\Throwable $throwable, string $level = LogLevel::ERROR, array $extra = []): void
+    public function logContextThrowable(\Throwable $throwable, array $extra = [], string $level = LogLevel::ERROR): void
     {
     }
 

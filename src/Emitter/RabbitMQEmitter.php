@@ -137,7 +137,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                             'The delayed "{messageClass}" command has been sent to the transport',
                             [
                                 'messageClass'         => \get_class($operation->command),
-                                'scheduledOperationId' => (string) $operation->id,
+                                'scheduledOperationId' => $operation->id->toString(),
                             ]
                         );
 
