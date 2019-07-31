@@ -68,10 +68,8 @@ final class Context implements ServiceBusContext
     /**
      * {@inheritdoc}
      */
-    public function return(object $message, int $secondsDelay = 3): Promise
+    public function return($secondsDelay = 3): Promise
     {
-        $this->messages[] = $message;
-
         return new Success();
     }
 
