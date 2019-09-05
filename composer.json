@@ -32,7 +32,7 @@
   "require": {
     "php": ">=7.3",
     "ext-bcmath": "*",
-    "amphp/amp": "v2.1.*",
+    "amphp/amp": "v2.2.*",
     "php-service-bus/common": "v3.3.*",
     "php-service-bus/storage-common": "v3.3.*"
   },
