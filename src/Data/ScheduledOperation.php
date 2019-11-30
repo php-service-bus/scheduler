@@ -22,50 +22,32 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @internal
  *
- * @property-read ScheduledOperationId $id
- * @property-read object               $command
- * @property-read \DateTimeImmutable   $date
- * @property-read bool                 $isSent
+ * @psalm-readonly
  */
 final class ScheduledOperation
 {
     /**
      * Identifier.
-     *
-     * @var ScheduledOperationId
      */
-    public $id;
+    public ScheduledOperationId $id;
 
     /**
      * Scheduled message.
-     *
-     * @var object
      */
-    public $command;
+    public object $command;
 
     /**
      * Execution date.
-     *
-     * @var \DateTimeImmutable
      */
-    public $date;
+    public \DateTimeImmutable $date;
 
     /**
      * The message was sent to the transport.
-     *
-     * @var bool
      */
-    public $isSent;
+    public bool $isSent;
 
     /**
-     * @param ScheduledOperationId $id
-     * @param object               $command
-     * @param \DateTimeImmutable   $dateTime
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
-     *
-     * @return ScheduledOperation
-     *
      */
     public static function new(ScheduledOperationId $id, object $command, \DateTimeImmutable $dateTime): self
     {
@@ -77,14 +59,9 @@ final class ScheduledOperation
     /**
      * @psalm-param array{processing_date:string, command:string, id:string, is_sent:bool} $data
      *
-     * @param array $data
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Common\Exceptions\DateTimeException
-     *
-     * @return self
-     *
      */
     public static function restoreFromRow(array $data): self
     {
@@ -112,14 +89,12 @@ final class ScheduledOperation
         throw new UnserializeCommandFailed('Command deserialization error');
     }
 
-    /**
-     * @param ScheduledOperationId $id
-     * @param object               $command
-     * @param \DateTimeImmutable   $dateTime
-     * @param bool                 $isSent
-     */
-    private function __construct(ScheduledOperationId $id, object $command, \DateTimeImmutable $dateTime, bool $isSent = false)
-    {
+    private function __construct(
+        ScheduledOperationId $id,
+        object $command,
+        \DateTimeImmutable $dateTime,
+        bool $isSent = false
+    ) {
         $this->id      = $id;
         $this->command = $command;
         $this->date    = $dateTime;
@@ -127,12 +102,7 @@ final class ScheduledOperation
     }
 
     /**
-     * @param \DateTimeImmutable $dateTime
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
-     *
-     * @return void
-     *
      */
     private static function validateDatetime(\DateTimeImmutable $dateTime): void
     {

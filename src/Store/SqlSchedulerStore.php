@@ -37,14 +37,8 @@ final class SqlSchedulerStore implements SchedulerStore
 {
     private const TABLE_NAME = 'scheduler_registry';
 
-    /**
-     * @var DatabaseAdapter
-     */
-    private $adapter;
+    private DatabaseAdapter $adapter;
 
-    /**
-     * @param DatabaseAdapter $adapter
-     */
     public function __construct(DatabaseAdapter $adapter)
     {
         $this->adapter = $adapter;
@@ -57,7 +51,6 @@ final class SqlSchedulerStore implements SchedulerStore
     {
         $adapter = $this->adapter;
 
-        /** @psalm-suppress InvalidArgument */
         return call(
             static function(ScheduledOperationId $id) use ($adapter, $postExtract): \Generator
             {
@@ -90,7 +83,6 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     yield $transaction->rollback();
 
-                    /** @noinspection PhpUnhandledExceptionInspection */
                     throw $throwable;
                 }
                 finally
@@ -109,7 +101,6 @@ final class SqlSchedulerStore implements SchedulerStore
     {
         $adapter = $this->adapter;
 
-        /** @psalm-suppress InvalidArgument */
         return call(
             static function(ScheduledOperationId $id) use ($adapter, $postRemove): \Generator
             {
@@ -132,7 +123,6 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     yield $transaction->rollback();
 
-                    /** @noinspection PhpUnhandledExceptionInspection */
                     throw $throwable;
                 }
                 finally
@@ -184,7 +174,6 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     yield $transaction->rollback();
 
-                    /** @noinspection PhpUnhandledExceptionInspection */
                     throw $throwable;
                 }
                 finally
@@ -197,17 +186,12 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     *
      * @noinspection PhpDocMissingThrowsInspection
-     *
-     * @param QueryExecutor $queryExecutor
      *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
-     *
-     * @return \Generator
      */
     private static function fetchNextOperation(QueryExecutor $queryExecutor): \Generator
     {
@@ -253,15 +237,10 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
-     * @param QueryExecutor $queryExecutor
-     * @param string        $id
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
-     *
-     * @return \Generator
      */
     private static function updateBarrierFlag(QueryExecutor $queryExecutor, string $id): \Generator
     {
@@ -292,16 +271,11 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
-     * @param QueryExecutor        $queryExecutor
-     * @param ScheduledOperationId $id
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
-     *
-     * @return \Generator
      */
     private static function load(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
@@ -342,27 +316,17 @@ final class SqlSchedulerStore implements SchedulerStore
      *
      * @noinspection PhpDocMissingThrowsInspection
      *
-     * @param QueryExecutor        $queryExecutor
-     * @param ScheduledOperationId $id
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\IncorrectParameterCast
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
-     *
-     * @return \Generator
      */
     private static function delete(QueryExecutor $queryExecutor, ScheduledOperationId $id): \Generator
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $deleteQuery   = deleteQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id->toString()));
         $compiledQuery = $deleteQuery->compile();
 
-        /**
-         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
-         *
-         * @noinspection   PhpUnhandledExceptionInspection
-         */
+        /** @psalm-suppress MixedTypeCoercion Invalid params() docblock */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
     }
 }

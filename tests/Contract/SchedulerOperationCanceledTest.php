@@ -33,7 +33,7 @@ final class SchedulerOperationCanceledTest extends TestCase
     {
         $id = ScheduledOperationId::new();
 
-        $operation = SchedulerOperationCanceled::create($id, 'test');
+        $operation = new SchedulerOperationCanceled($id, 'test');
 
         static::assertSame($id, $operation->id);
         static::assertSame('test', $operation->reason);

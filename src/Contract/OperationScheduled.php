@@ -18,69 +18,33 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Operation successful scheduled.
  *
- * @property-read ScheduledOperationId        $id
- * @property-read string                      $commandNamespace
- * @property-read \DateTimeImmutable          $executionDate
- * @property-read NextScheduledOperation|null $nextOperation
+ * @internal
+ *
+ * @psalm-readonly
  */
 final class OperationScheduled
 {
     /**
      * Operation identifier.
-     *
-     * @var ScheduledOperationId
      */
-    public $id;
+    public ScheduledOperationId $id;
 
     /**
      * Command namespace.
      *
      * @psalm-var class-string
-     *
-     * @var string
      */
-    public $commandNamespace;
+    public string $commandNamespace;
 
     /**
      * Execution date.
-     *
-     * @var \DateTimeImmutable
      */
-    public $executionDate;
+    public \DateTimeImmutable $executionDate;
 
     /**
      * Next operation data.
-     *
-     * @var NextScheduledOperation|null
      */
-    public $nextOperation;
-
-    /**
-     * @param ScheduledOperationId        $id
-     * @param object                      $command ,
-     * @param \DateTimeImmutable          $executionDate
-     * @param NextScheduledOperation|null $nextOperation
-     *
-     * @return self
-     */
-    public static function create(
-        ScheduledOperationId $id,
-        object $command,
-        \DateTimeImmutable $executionDate,
-        ?NextScheduledOperation $nextOperation
-    ): self {
-        return new self($id, \get_class($command), $executionDate, $nextOperation);
-    }
-
-    /**
-     * Has next operation data.
-     *
-     * @return bool
-     */
-    public function hasNextOperation(): bool
-    {
-        return null !== $this->nextOperation;
-    }
+    public ?NextScheduledOperation $nextOperation;
 
     /**
      * @psalm-param class-string $commandNamespace
@@ -90,7 +54,7 @@ final class OperationScheduled
      * @param \DateTimeImmutable          $executionDate
      * @param NextScheduledOperation|null $nextOperation
      */
-    private function __construct(
+    public function __construct(
         ScheduledOperationId $id,
         string $commandNamespace,
         \DateTimeImmutable $executionDate,
@@ -100,5 +64,13 @@ final class OperationScheduled
         $this->commandNamespace = $commandNamespace;
         $this->executionDate    = $executionDate;
         $this->nextOperation    = $nextOperation;
+    }
+
+    /**
+     * Has next operation data.
+     */
+    public function hasNextOperation(): bool
+    {
+        return null !== $this->nextOperation;
     }
 }

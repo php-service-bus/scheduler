@@ -27,14 +27,8 @@ use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
  */
 final class SchedulerMessagesProcessor implements MessageExecutor
 {
-    /**
-     * @var SchedulerEmitter
-     */
-    private $emitter;
+    private SchedulerEmitter $emitter;
 
-    /**
-     * @param SchedulerEmitter $emitter
-     */
     public function __construct(SchedulerEmitter $emitter)
     {
         $this->emitter = $emitter;
@@ -45,13 +39,8 @@ final class SchedulerMessagesProcessor implements MessageExecutor
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @param object            $message
-     * @param ServiceBusContext $context
-     *
      * @throws \LogicException Unsupported message type specified
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
-     *
-     * @return Promise
      */
     public function __invoke(object $message, ServiceBusContext $context): Promise
     {

@@ -29,7 +29,9 @@ final class Context implements ServiceBusContext
      *
      * @var object[]
      */
-    public $messages = [];
+    public array
+
+ $messages = [];
 
     /**
      * {@inheritdoc}

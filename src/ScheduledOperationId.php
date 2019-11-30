@@ -20,25 +20,15 @@ use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
  */
 final class ScheduledOperationId
 {
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
-    /**
-     * @return self
-     */
     public static function new(): self
     {
         return new self(uuid());
     }
 
     /**
-     * @param string $value
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
-     *
-     * @return ScheduledOperationId
      */
     public static function restore(string $value): self
     {
@@ -50,17 +40,11 @@ final class ScheduledOperationId
         return new self($value);
     }
 
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     */
     private function __construct(string $value)
     {
         $this->value = $value;

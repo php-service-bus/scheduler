@@ -32,10 +32,7 @@ use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;
  */
 final class SchedulerProviderTest extends TestCase
 {
-    /**
-     * @var DatabaseAdapter
-     */
-    private static $adapter;
+    private static DatabaseAdapter $adapter;
 
     /**
      * @var SchedulerStore
@@ -45,12 +42,10 @@ final class SchedulerProviderTest extends TestCase
     /**
      * @var SchedulerProvider
      */
-    private $provider;
+    private SchedulerProvider $provider;
 
     /**
      * @throws \Throwable
-     *
-     * @return void
      */
     public static function setUpBeforeClass(): void
     {
@@ -65,20 +60,6 @@ final class SchedulerProviderTest extends TestCase
 
     /**
      * @throws \Throwable
-     *
-     * @return void
-     */
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-
-        self::$adapter = null;
-    }
-
-    /**
-     * @throws \Throwable
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -90,8 +71,6 @@ final class SchedulerProviderTest extends TestCase
 
     /**
      * @throws \Throwable
-     *
-     * @return void
      */
     protected function tearDown(): void
     {
@@ -106,8 +85,6 @@ final class SchedulerProviderTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
      */
     public function scheduleWithWrongDate(): void
     {
@@ -128,8 +105,6 @@ final class SchedulerProviderTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
      */
     public function successSchedule(): void
     {
@@ -158,8 +133,6 @@ final class SchedulerProviderTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
      */
     public function scheduleDuplicateOperation(): void
     {
@@ -191,8 +164,6 @@ final class SchedulerProviderTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
      */
     public function cancelScheduledOperation(): void
     {
@@ -229,8 +200,6 @@ final class SchedulerProviderTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
      */
     public function cancelUnknownOperation(): void
     {

@@ -18,54 +18,33 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Scheduler operation canceled.
  *
- * @property-read ScheduledOperationId        $id
- * @property-read string|null                 $reason
- * @property-read NextScheduledOperation|null $nextOperation
+ * @internal
+ *
+ * @psalm-readonly
  */
 final class SchedulerOperationCanceled
 {
     /**
      * Operation identifier.
-     *
-     * @var ScheduledOperationId
      */
-    public $id;
+    public ScheduledOperationId $id;
 
     /**
      * Reason.
-     *
-     * @var string|null
      */
-    public $reason;
+    public ?string $reason;
 
     /**
      * Next operation data.
-     *
-     * @var NextScheduledOperation|null
      */
-    public $nextOperation;
-
-    /**
-     * @param ScheduledOperationId        $id
-     * @param string|null                 $reason
-     * @param NextScheduledOperation|null $nextScheduledOperation
-     *
-     * @return self
-     */
-    public static function create(
-        ScheduledOperationId $id,
-        ?string $reason,
-        ?NextScheduledOperation $nextScheduledOperation = null
-    ): self {
-        return new self($id, $reason, $nextScheduledOperation);
-    }
+    public ?NextScheduledOperation $nextOperation;
 
     /**
      * @param ScheduledOperationId        $id
      * @param string|null                 $reason
      * @param NextScheduledOperation|null $nextOperation
      */
-    private function __construct(ScheduledOperationId $id, ?string $reason, ?NextScheduledOperation $nextOperation)
+    public function __construct(ScheduledOperationId $id, ?string $reason, ?NextScheduledOperation $nextOperation = null)
     {
         $this->id            = $id;
         $this->reason        = $reason;

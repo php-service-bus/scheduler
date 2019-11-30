@@ -19,31 +19,18 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @see SchedulerOperationEmitted
  *
- * @property-read ScheduledOperationId $id
+ * @internal
+ *
+ * @psalm-readonly
  */
 final class EmitSchedulerOperation
 {
     /**
      * Scheduled operation identifier.
-     *
-     * @var ScheduledOperationId
      */
-    public $id;
+    public ScheduledOperationId $id;
 
-    /**
-     * @param ScheduledOperationId $id
-     *
-     * @return self
-     */
-    public static function create(ScheduledOperationId $id): self
-    {
-        return new self($id);
-    }
-
-    /**
-     * @param ScheduledOperationId $id
-     */
-    private function __construct(ScheduledOperationId $id)
+    public function __construct(ScheduledOperationId $id)
     {
         $this->id = $id;
     }

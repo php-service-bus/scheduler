@@ -21,10 +21,10 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
 {
     /**
      * @psalm-var array<string, string|int|float>
-     *
-     * @var array
      */
-    private $headers = [];
+    private array
+
+ $headers = [];
 
     /**
      * @var int|string|null
@@ -33,9 +33,6 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
 
     /**
      * @param int|string|null $traceId
-     * @param int             $delay
-     *
-     * @return self
      */
     public static function scheduledMessage($traceId, int $delay): self
     {

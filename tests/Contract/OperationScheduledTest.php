@@ -40,7 +40,7 @@ final class OperationScheduledTest extends TestCase
         $dateTime = new \DateTimeImmutable('NOW');
         $next     = NextScheduledOperation::create($id, $dateTime);
 
-        $operation = OperationScheduled::create($id, $command, $dateTime, $next);
+        $operation = new OperationScheduled($id, \get_class($command), $dateTime, $next);
 
         static::assertNotNull($operation->nextOperation);
 

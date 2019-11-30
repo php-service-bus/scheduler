@@ -20,35 +20,25 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @internal
  *
- * @property-read ScheduledOperationId $id
- * @property-read \DateTimeImmutable   $time
+ * @psalm-readonly
  */
 final class NextScheduledOperation
 {
     /**
      * Job identifier.
-     *
-     * @var ScheduledOperationId
      */
-    public $id;
+    public ScheduledOperationId $id;
 
     /**
      * Next operation date.
-     *
-     * @var \DateTimeImmutable
      */
-    public $time;
+    public \DateTimeImmutable $time;
 
     /**
      * @psalm-param array<string, string> $row
      *
-     * @param array $row
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Common\Exceptions\DateTimeException
-     *
-     * @return self
-     *
      */
     public static function fromRow(array $row): self
     {
@@ -61,21 +51,11 @@ final class NextScheduledOperation
         );
     }
 
-    /**
-     * @param ScheduledOperationId $id
-     * @param \DateTimeImmutable   $time
-     *
-     * @return self
-     */
     public static function create(ScheduledOperationId $id, \DateTimeImmutable $time): self
     {
         return new self($id, $time);
     }
 
-    /**
-     * @param ScheduledOperationId $id
-     * @param \DateTimeImmutable   $time
-     */
     private function __construct(ScheduledOperationId $id, \DateTimeImmutable $time)
     {
         $this->id   = $id;

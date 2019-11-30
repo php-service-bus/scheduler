@@ -20,41 +20,23 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @see EmitSchedulerOperation
  *
- * @property-read ScheduledOperationId        $id
- * @property-read NextScheduledOperation|null $nextOperation
+ * @internal
+ *
+ * @psalm-readonly
  */
 final class SchedulerOperationEmitted
 {
     /**
      * Scheduled operation identifier.
-     *
-     * @var ScheduledOperationId
      */
-    public $id;
+    public ScheduledOperationId $id;
 
     /**
      * Next operation data.
-     *
-     * @var NextScheduledOperation|null
      */
-    public $nextOperation;
+    public ?NextScheduledOperation $nextOperation;
 
-    /**
-     * @param ScheduledOperationId        $id
-     * @param NextScheduledOperation|null $nextScheduledOperation
-     *
-     * @return self
-     */
-    public static function create(ScheduledOperationId $id, ?NextScheduledOperation $nextScheduledOperation = null): self
-    {
-        return new self($id, $nextScheduledOperation);
-    }
-
-    /**
-     * @param ScheduledOperationId        $id
-     * @param NextScheduledOperation|null $nextOperation
-     */
-    public function __construct(ScheduledOperationId $id, ?NextScheduledOperation $nextOperation)
+    public function __construct(ScheduledOperationId $id, ?NextScheduledOperation $nextOperation = null)
     {
         $this->id            = $id;
         $this->nextOperation = $nextOperation;

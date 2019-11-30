@@ -32,14 +32,8 @@ use ServiceBus\Scheduler\Store\SchedulerStore;
  */
 final class RabbitMQEmitter implements SchedulerEmitter
 {
-    /**
-     * @var SchedulerStore
-     */
-    private $store;
+    private SchedulerStore $store;
 
-    /**
-     * @param SchedulerStore $store
-     */
     public function __construct(SchedulerStore $store)
     {
         $this->store = $store;
@@ -63,7 +57,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                     $context->logContextThrowable($exception);
 
                     yield $context->delivery(
-                        SchedulerOperationEmitted::create($id)
+                        new SchedulerOperationEmitted($id)
                     );
                 }
                 catch (\Throwable $throwable)
@@ -98,7 +92,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
 
                     /** Message will return after a specified time interval */
                     yield $context->delivery(
-                        EmitSchedulerOperation::create($id),
+                        new  EmitSchedulerOperation($id),
                         SchedulerDeliveryOptions::scheduledMessage($context->traceId(), $delay)
                     );
 
@@ -119,11 +113,6 @@ final class RabbitMQEmitter implements SchedulerEmitter
         );
     }
 
-    /**
-     * @param ServiceBusContext $context
-     *
-     * @return callable
-     */
     private function createPostExtract(ServiceBusContext $context): callable
     {
         return static function(?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
@@ -141,7 +130,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                             ]
                         );
 
-                        yield $context->delivery(SchedulerOperationEmitted::create($operation->id, $nextOperation));
+                        yield $context->delivery(new SchedulerOperationEmitted($operation->id, $nextOperation));
                     }
                 );
             }
@@ -150,12 +139,6 @@ final class RabbitMQEmitter implements SchedulerEmitter
 
     /**
      * Calculate next execution delay.
-     *
-     * @noinspection PhpDocMissingThrowsInspection
-     *
-     * @param NextScheduledOperation $nextScheduledOperation
-     *
-     * @return int
      */
     private function calculateExecutionDelay(NextScheduledOperation $nextScheduledOperation): int
     {
@@ -166,7 +149,6 @@ final class RabbitMQEmitter implements SchedulerEmitter
          */
         $currentDate = datetimeInstantiator('NOW');
 
-        /** @noinspection UnnecessaryCastingInspection */
         $executionDelay = $nextScheduledOperation->time->getTimestamp() - $currentDate->getTimestamp();
 
         return (int) bcmul((string) $executionDelay, '1000');

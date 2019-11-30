@@ -28,12 +28,7 @@ interface SchedulerEmitter
      *
      * @see SchedulerOperationEmitted event
      *
-     * @param ScheduledOperationId $id
-     * @param ServiceBusContext    $context
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
-     *
-     * @return Promise
      */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise;
 
@@ -42,12 +37,7 @@ interface SchedulerEmitter
      *
      * @see EmitSchedulerOperation command
      *
-     * @param NextScheduledOperation|null $nextOperation
-     * @param ServiceBusContext           $context
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
-     *
-     * @return Promise
      */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise;
 }

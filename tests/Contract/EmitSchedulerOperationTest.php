@@ -33,8 +33,8 @@ final class EmitSchedulerOperationTest extends TestCase
     {
         $id = ScheduledOperationId::new();
 
-        EmitSchedulerOperation::create($id);
+        new EmitSchedulerOperation($id);
 
-        static::assertSame($id, EmitSchedulerOperation::create($id)->id);
+        static::assertSame($id, (new EmitSchedulerOperation($id))->id);
     }
 }

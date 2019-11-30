@@ -1,5 +1,5 @@
 ## What is it?
-[![Build Status](https://travis-ci.org/php-service-bus/scheduler.svg?branch=v3.3)](https://travis-ci.org/php-service-bus/scheduler)
+[![Build Status](https://travis-ci.org/php-service-bus/scheduler.svg?branch=v4.4)](https://travis-ci.org/php-service-bus/scheduler)
 [![Code Coverage](https://scrutinizer-ci.com/g/php-service-bus/scheduler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/php-service-bus/scheduler/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/php-service-bus/scheduler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/php-service-bus/scheduler/?branch=master)
 

@@ -24,43 +24,28 @@ interface SchedulerStore
     /**
      * Extract operation (load and delete).
      *
-     * @param ScheduledOperationId $id
-     * @param callable             $postExtract
-     *
      * @throws \ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
-     *
-     * @return Promise
      */
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise;
 
     /**
      * Remove operation.
      *
-     * @param ScheduledOperationId $id
-     * @param callable             $postRemove
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
-     *
-     * @return Promise It doesn't return any result
      */
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise;
 
     /**
      * Save a new operation.
      *
-     * @param ScheduledOperation $operation
-     * @param callable           $postAdd
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
-     *
-     * @return Promise It doesn't return any result
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise;
 }

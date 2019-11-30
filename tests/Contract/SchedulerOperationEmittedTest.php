@@ -33,7 +33,7 @@ final class SchedulerOperationEmittedTest extends TestCase
     {
         $id = ScheduledOperationId::new();
 
-        $operation = SchedulerOperationEmitted::create($id);
+        $operation = new SchedulerOperationEmitted($id);
 
         static::assertSame($id, $operation->id);
         static::assertNull($operation->nextOperation);

@@ -32,14 +32,8 @@ use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
  */
 final class SchedulerProvider
 {
-    /**
-     * @var SchedulerStore
-     */
-    private $store;
+    private SchedulerStore $store;
 
-    /**
-     * @param SchedulerStore $store
-     */
     public function __construct(SchedulerStore $store)
     {
         $this->store = $store;
@@ -49,11 +43,6 @@ final class SchedulerProvider
      * Schedule command execution.
      *
      * @noinspection PhpDocRedundantThrowsInspection
-     *
-     * @param ScheduledOperationId $id
-     * @param object               $command
-     * @param \DateTimeImmutable   $executionDate
-     * @param ServiceBusContext    $context
      *
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      * @throws \ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation
@@ -67,7 +56,6 @@ final class SchedulerProvider
         \DateTimeImmutable $executionDate,
         ServiceBusContext $context
     ): Promise {
-        /** @psalm-suppress InvalidArgument */
         return call(
             function(ScheduledOperation $operation) use ($context): \Generator
             {
@@ -105,17 +93,12 @@ final class SchedulerProvider
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
-     * @param ScheduledOperationId $id
-     * @param ServiceBusContext    $context
-     * @param string|null          $reason
-     *
      * @throws \ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation
      *
      * @return Promise Doesn't return result
      */
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {
-        /** @psalm-suppress InvalidArgument */
         return call(
             function(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason): \Generator
             {
@@ -138,36 +121,27 @@ final class SchedulerProvider
         );
     }
 
-    /**
-     * @param ServiceBusContext    $context
-     * @param ScheduledOperationId $id
-     * @param string|null          $reason
-     *
-     * @return callable
-     */
     private static function createPostCancel(ServiceBusContext $context, ScheduledOperationId $id, ?string $reason): callable
     {
         return static function(?NextScheduledOperation $nextOperation) use ($id, $reason, $context): \Generator
         {
             yield $context->delivery(
-                SchedulerOperationCanceled::create($id, $reason, $nextOperation)
+                new SchedulerOperationCanceled($id, $reason, $nextOperation)
             );
         };
     }
 
-    /**
-     * @param ServiceBusContext $context
-     *
-     * @return callable
-     */
     private static function createPostAdd(ServiceBusContext $context): callable
     {
         return static function(ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
         {
+            /** @psalm-var class-string $commandClass */
+            $commandClass = (string) \get_class($operation->command);
+
             yield $context->delivery(
-                OperationScheduled::create(
+                new OperationScheduled(
                     $operation->id,
-                    $operation->command,
+                    $commandClass,
                     $operation->date,
                     $nextOperation
                 )
