@@ -22,9 +22,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     /**
      * @psalm-var array<string, string|int|float>
      */
-    private array
-
- $headers = [];
+    private array $headers = [];
 
     /**
      * @var int|string|null

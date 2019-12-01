@@ -57,7 +57,7 @@ final class SchedulerProvider
         ServiceBusContext $context
     ): Promise {
         return call(
-            function(ScheduledOperation $operation) use ($context): \Generator
+            function (ScheduledOperation $operation) use ($context): \Generator
             {
                 try
                 {
@@ -100,7 +100,7 @@ final class SchedulerProvider
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {
         return call(
-            function(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason): \Generator
+            function (ScheduledOperationId $id, ServiceBusContext $context, ?string $reason): \Generator
             {
                 try
                 {
@@ -123,7 +123,7 @@ final class SchedulerProvider
 
     private static function createPostCancel(ServiceBusContext $context, ScheduledOperationId $id, ?string $reason): callable
     {
-        return static function(?NextScheduledOperation $nextOperation) use ($id, $reason, $context): \Generator
+        return static function (?NextScheduledOperation $nextOperation) use ($id, $reason, $context): \Generator
         {
             yield $context->delivery(
                 new SchedulerOperationCanceled($id, $reason, $nextOperation)
@@ -133,7 +133,7 @@ final class SchedulerProvider
 
     private static function createPostAdd(ServiceBusContext $context): callable
     {
-        return static function(ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
+        return static function (ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
         {
             /** @psalm-var class-string $commandClass */
             $commandClass = (string) \get_class($operation->command);

@@ -52,7 +52,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $adapter = $this->adapter;
 
         return call(
-            static function(ScheduledOperationId $id) use ($adapter, $postExtract): \Generator
+            static function (ScheduledOperationId $id) use ($adapter, $postExtract): \Generator
             {
                 /** @var ScheduledOperation|null $operation */
                 $operation = yield from self::load($adapter, $id);
@@ -102,7 +102,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $adapter = $this->adapter;
 
         return call(
-            static function(ScheduledOperationId $id) use ($adapter, $postRemove): \Generator
+            static function (ScheduledOperationId $id) use ($adapter, $postRemove): \Generator
             {
                 /** @var \ServiceBus\Storage\Common\Transaction $transaction */
                 $transaction = yield $adapter->transaction();
@@ -143,7 +143,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
         /** @psalm-suppress InvalidArgument */
         return call(
-            static function(ScheduledOperation $operation) use ($adapter, $postAdd): \Generator
+            static function (ScheduledOperation $operation) use ($adapter, $postAdd): \Generator
             {
                 /** @var \ServiceBus\Storage\Common\Transaction $transaction */
                 $transaction = yield $adapter->transaction();

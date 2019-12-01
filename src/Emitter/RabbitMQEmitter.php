@@ -46,7 +46,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     {
         /** @psalm-suppress InvalidArgument */
         return call(
-            function(ScheduledOperationId $id) use ($context): \Generator
+            function (ScheduledOperationId $id) use ($context): \Generator
             {
                 try
                 {
@@ -76,7 +76,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     {
         /** @psalm-suppress InvalidArgument */
         return call(
-            function(?NextScheduledOperation $nextOperation) use ($context): \Generator
+            function (?NextScheduledOperation $nextOperation) use ($context): \Generator
             {
                 try
                 {
@@ -115,12 +115,12 @@ final class RabbitMQEmitter implements SchedulerEmitter
 
     private function createPostExtract(ServiceBusContext $context): callable
     {
-        return static function(?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
+        return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
         {
             if (null !== $operation)
             {
                 $context->delivery($operation->command)->onResolve(
-                    static function() use ($operation, $nextOperation, $context): \Generator
+                    static function () use ($operation, $nextOperation, $context): \Generator
                     {
                         $context->logContextMessage(
                             'The delayed "{messageClass}" command has been sent to the transport',

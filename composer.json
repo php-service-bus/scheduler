@@ -37,7 +37,7 @@
     "php-service-bus/storage-common": "v4.0.*"
   },
   "require-dev": {
-    "php-service-bus/code-style-config": "v1.1.*",
+    "php-service-bus/code-style-config": "v1.2.*",
     "php-service-bus/storage-sql": "v4.0.*",
     "phpunit/phpunit": "v8.4.*",
     "vimeo/psalm": "v3.7.*",
