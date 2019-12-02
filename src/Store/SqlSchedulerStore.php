@@ -57,7 +57,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 /** @var ScheduledOperation|null $operation */
                 $operation = yield from self::load($adapter, $id);
 
-                if (null === $operation)
+                if ($operation === null)
                 {
                     throw new ScheduledOperationNotFound(
                         \sprintf('Operation with ID "%s" not found', $id->toString())
@@ -297,7 +297,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $result = /** @noinspection PhpUnhandledExceptionInspection */
             yield fetchOne($resultSet);
 
-        if (true === \is_array($result) && 0 !== \count($result))
+        if (\is_array($result) === true && \count($result) !== 0)
         {
             if ($queryExecutor instanceof BinaryDataDecoder)
             {

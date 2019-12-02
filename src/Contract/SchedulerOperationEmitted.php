@@ -34,7 +34,7 @@ final class SchedulerOperationEmitted
     /**
      * Next operation data.
      */
-    public ?NextScheduledOperation $nextOperation;
+    public ?NextScheduledOperation $nextOperation = null;
 
     public function __construct(ScheduledOperationId $id, ?NextScheduledOperation $nextOperation = null)
     {

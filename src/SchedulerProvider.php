@@ -47,8 +47,6 @@ final class SchedulerProvider
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      * @throws \ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation
      * @throws \ServiceBus\Scheduler\Exceptions\OperationSchedulingError
-     *
-     * @return Promise Doesn't return result
      */
     public function schedule(
         ScheduledOperationId $id,
@@ -94,8 +92,6 @@ final class SchedulerProvider
      * @noinspection PhpDocRedundantThrowsInspection
      *
      * @throws \ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation
-     *
-     * @return Promise Doesn't return result
      */
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {

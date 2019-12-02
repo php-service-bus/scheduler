@@ -37,7 +37,7 @@ final class SchedulerOperationCanceled
     /**
      * Next operation data.
      */
-    public ?NextScheduledOperation $nextOperation;
+    public ?NextScheduledOperation $nextOperation = null;
 
     /**
      * @param ScheduledOperationId        $id

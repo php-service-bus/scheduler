@@ -44,7 +44,7 @@ final class OperationScheduled
     /**
      * Next operation data.
      */
-    public ?NextScheduledOperation $nextOperation;
+    public ?NextScheduledOperation $nextOperation = null;
 
     /**
      * @psalm-param class-string $commandNamespace

@@ -32,7 +32,7 @@ final class ScheduledOperationId
      */
     public static function restore(string $value): self
     {
-        if ('' === $value)
+        if ($value === '')
         {
             throw new EmptyScheduledOperationIdentifierNotAllowed('Scheduled operation ID can\'t be empty');
         }

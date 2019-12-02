@@ -35,7 +35,7 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     }
 
     /**
-     * Execute message.
+     * @inheritDoc
      *
      * @noinspection PhpDocRedundantThrowsInspection
      *
