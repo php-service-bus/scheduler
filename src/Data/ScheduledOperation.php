@@ -28,23 +28,31 @@ final class ScheduledOperation
 {
     /**
      * Identifier.
+     *
+     * @var ScheduledOperationId
      */
-    public ScheduledOperationId $id;
+    public $id;
 
     /**
      * Scheduled message.
+     *
+     * @var object
      */
-    public object $command;
+    public $command;
 
     /**
      * Execution date.
+     *
+     * @var \DateTimeImmutable
      */
-    public \DateTimeImmutable $date;
+    public $date;
 
     /**
      * The message was sent to the transport.
+     *
+     * @var bool
      */
-    public bool $isSent;
+    public $isSent;
 
     /**
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate

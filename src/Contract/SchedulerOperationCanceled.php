@@ -26,18 +26,24 @@ final class SchedulerOperationCanceled
 {
     /**
      * Operation identifier.
+     *
+     * @var ScheduledOperationId
      */
-    public ScheduledOperationId $id;
+    public $id;
 
     /**
      * Reason.
+     *
+     * @var string|null
      */
-    public ?string $reason;
+    public $reason = null;
 
     /**
      * Next operation data.
+     *
+     * @var NextScheduledOperation|null
      */
-    public ?NextScheduledOperation $nextOperation = null;
+    public $nextOperation = null;
 
     /**
      * @param ScheduledOperationId        $id

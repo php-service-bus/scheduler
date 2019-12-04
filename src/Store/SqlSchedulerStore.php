@@ -37,7 +37,8 @@ final class SqlSchedulerStore implements SchedulerStore
 {
     private const TABLE_NAME = 'scheduler_registry';
 
-    private DatabaseAdapter $adapter;
+    /** @var DatabaseAdapter */
+    private $adapter;
 
     public function __construct(DatabaseAdapter $adapter)
     {

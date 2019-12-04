@@ -32,7 +32,8 @@ use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;
  */
 final class SchedulerProviderTest extends TestCase
 {
-    private static DatabaseAdapter $adapter;
+    /** @var DatabaseAdapter|null */
+    private static $adapter = null;
 
     /**
      * @var SchedulerStore
@@ -42,7 +43,7 @@ final class SchedulerProviderTest extends TestCase
     /**
      * @var SchedulerProvider
      */
-    private SchedulerProvider $provider;
+    private $provider;
 
     /**
      * @throws \Throwable
@@ -86,18 +87,16 @@ final class SchedulerProviderTest extends TestCase
      *
      * @throws \Throwable
      */
-    public function scheduleWithWrongDate(): void
+    public function scheduleWithWrongDate(): \Generator
     {
         $this->expectException(InvalidScheduledOperationExecutionDate::class);
         $this->expectExceptionMessage('The date of the scheduled task should be greater than the current one');
 
-        wait(
-            $this->provider->schedule(
-                ScheduledOperationId::new(),
-                new EmptyCommand(),
-                new \DateTimeImmutable('-1 days'),
-                new Context()
-            )
+        yield $this->provider->schedule(
+            ScheduledOperationId::new(),
+            new EmptyCommand(),
+            new \DateTimeImmutable('-1 days'),
+            new Context()
         );
     }
 
@@ -106,17 +105,15 @@ final class SchedulerProviderTest extends TestCase
      *
      * @throws \Throwable
      */
-    public function successSchedule(): void
+    public function successSchedule(): \Generator
     {
         $context = new Context();
 
-        wait(
-            $this->provider->schedule(
-                ScheduledOperationId::new(),
-                new EmptyCommand(),
-                new \DateTimeImmutable('+1 days'),
-                $context
-            )
+        yield $this->provider->schedule(
+            ScheduledOperationId::new(),
+            new EmptyCommand(),
+            new \DateTimeImmutable('+1 days'),
+            $context
         );
 
         $messages = $context->messages;
@@ -134,29 +131,25 @@ final class SchedulerProviderTest extends TestCase
      *
      * @throws \Throwable
      */
-    public function scheduleDuplicateOperation(): void
+    public function scheduleDuplicateOperation(): \Generator
     {
         $this->expectException(DuplicateScheduledOperation::class);
 
         $id      = ScheduledOperationId::new();
         $context = new Context();
 
-        wait(
-            $this->provider->schedule(
-                $id,
-                new EmptyCommand(),
-                new \DateTimeImmutable('+1 days'),
-                $context
-            )
+        yield $this->provider->schedule(
+            $id,
+            new EmptyCommand(),
+            new \DateTimeImmutable('+1 days'),
+            $context
         );
 
-        wait(
-            $this->provider->schedule(
-                $id,
-                new EmptyCommand(),
-                new \DateTimeImmutable('+1 days'),
-                $context
-            )
+        yield $this->provider->schedule(
+            $id,
+            new EmptyCommand(),
+            new \DateTimeImmutable('+1 days'),
+            $context
         );
     }
 
@@ -165,21 +158,19 @@ final class SchedulerProviderTest extends TestCase
      *
      * @throws \Throwable
      */
-    public function cancelScheduledOperation(): void
+    public function cancelScheduledOperation(): \Generator
     {
         $id      = ScheduledOperationId::new();
         $context = new Context();
 
-        wait(
-            $this->provider->schedule(
-                $id,
-                new EmptyCommand(),
-                new \DateTimeImmutable('+1 days'),
-                $context
-            )
+        yield $this->provider->schedule(
+            $id,
+            new EmptyCommand(),
+            new \DateTimeImmutable('+1 days'),
+            $context
         );
 
-        wait($this->provider->cancel($id, $context));
+        yield $this->provider->cancel($id, $context);
 
         $messages = $context->messages;
 
@@ -190,8 +181,8 @@ final class SchedulerProviderTest extends TestCase
 
         static::assertInstanceOf(SchedulerOperationCanceled::class, $message);
 
-        $resultSet  = wait(self::$adapter->execute('SELECT count(id) as cnt from scheduler_registry'));
-        $operations = wait(fetchOne($resultSet));
+        $resultSet  = yield self::$adapter->execute('SELECT count(id) as cnt from scheduler_registry');
+        $operations = yield fetchOne($resultSet);
 
         static::assertSame(0, (int) $operations['cnt']);
     }
@@ -201,11 +192,11 @@ final class SchedulerProviderTest extends TestCase
      *
      * @throws \Throwable
      */
-    public function cancelUnknownOperation(): void
+    public function cancelUnknownOperation(): \Generator
     {
         $context = new Context();
 
-        wait($this->provider->cancel(ScheduledOperationId::new(), $context));
+        yield $this->provider->cancel(ScheduledOperationId::new(), $context);
 
         static::assertCount(1, $context->messages);
     }

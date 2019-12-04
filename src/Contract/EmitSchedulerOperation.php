@@ -27,8 +27,10 @@ final class EmitSchedulerOperation
 {
     /**
      * Scheduled operation identifier.
+     *
+     * @var ScheduledOperationId
      */
-    public ScheduledOperationId $id;
+    public $id;
 
     public function __construct(ScheduledOperationId $id)
     {

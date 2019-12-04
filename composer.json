@@ -30,7 +30,7 @@
     }
   },
   "require": {
-    "php": ">=7.4",
+    "php": ">=7.3",
     "ext-bcmath": "*",
     "amphp/amp": "v2.4.*",
     "php-service-bus/common": "v4.0.*",

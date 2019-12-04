@@ -25,9 +25,6 @@ final class SchedulerOperationCanceledTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
-     *
      */
     public function create(): void
     {

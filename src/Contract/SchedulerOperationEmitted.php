@@ -28,13 +28,17 @@ final class SchedulerOperationEmitted
 {
     /**
      * Scheduled operation identifier.
+     *
+     * @var ScheduledOperationId
      */
-    public ScheduledOperationId $id;
+    public $id;
 
     /**
-     * Next operation data.
+     * Next operation data
+     *
+     * @var NextScheduledOperation|null
      */
-    public ?NextScheduledOperation $nextOperation = null;
+    public $nextOperation = null;
 
     public function __construct(ScheduledOperationId $id, ?NextScheduledOperation $nextOperation = null)
     {

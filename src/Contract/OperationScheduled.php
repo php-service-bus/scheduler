@@ -26,25 +26,33 @@ final class OperationScheduled
 {
     /**
      * Operation identifier.
+     *
+     * @var ScheduledOperationId
      */
-    public ScheduledOperationId $id;
+    public $id;
 
     /**
      * Command namespace.
      *
      * @psalm-var class-string
+     *
+     * @var string
      */
-    public string $commandNamespace;
+    public $commandNamespace;
 
     /**
      * Execution date.
+     *
+     * @var \DateTimeImmutable
      */
-    public \DateTimeImmutable $executionDate;
+    public $executionDate;
 
     /**
      * Next operation data.
+     *
+     * @var NextScheduledOperation|null
      */
-    public ?NextScheduledOperation $nextOperation = null;
+    public $nextOperation = null;
 
     /**
      * @psalm-param class-string $commandNamespace

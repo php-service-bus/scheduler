@@ -20,7 +20,8 @@ use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
  */
 final class ScheduledOperationId
 {
-    private string $value;
+    /** @var string  */
+    private $value;
 
     public static function new(): self
     {

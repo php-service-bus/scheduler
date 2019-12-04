@@ -26,13 +26,17 @@ final class NextScheduledOperation
 {
     /**
      * Job identifier.
+     *
+     * @var ScheduledOperationId
      */
-    public ScheduledOperationId $id;
+    public $id;
 
     /**
      * Next operation date.
+     *
+     * @var \DateTimeImmutable
      */
-    public \DateTimeImmutable $time;
+    public $time;
 
     /**
      * @psalm-param array<string, string> $row

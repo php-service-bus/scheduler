@@ -27,7 +27,8 @@ use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
  */
 final class SchedulerMessagesProcessor implements MessageExecutor
 {
-    private SchedulerEmitter $emitter;
+    /** @var SchedulerEmitter  */
+    private $emitter;
 
     public function __construct(SchedulerEmitter $emitter)
     {

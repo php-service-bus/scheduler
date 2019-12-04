@@ -26,9 +26,6 @@ final class OperationScheduledTest extends TestCase
      * @test
      *
      * @throws \Throwable
-     *
-     * @return void
-     *
      */
     public function create(): void
     {

@@ -32,7 +32,8 @@ use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
  */
 final class SchedulerProvider
 {
-    private SchedulerStore $store;
+    /** @var SchedulerStore */
+    private $store;
 
     public function __construct(SchedulerStore $store)
     {

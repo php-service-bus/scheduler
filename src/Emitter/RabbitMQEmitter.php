@@ -32,7 +32,8 @@ use ServiceBus\Scheduler\Store\SchedulerStore;
  */
 final class RabbitMQEmitter implements SchedulerEmitter
 {
-    private SchedulerStore $store;
+    /** @var SchedulerStore */
+    private $store;
 
     public function __construct(SchedulerStore $store)
     {
