@@ -20,7 +20,7 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @internal
  *
- * @psalm-readonly
+ * @psalm-immutable
  */
 final class OperationScheduled
 {

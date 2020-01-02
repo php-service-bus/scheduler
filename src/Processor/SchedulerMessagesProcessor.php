@@ -27,7 +27,7 @@ use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
  */
 final class SchedulerMessagesProcessor implements MessageExecutor
 {
-    /** @var SchedulerEmitter  */
+    /** @var SchedulerEmitter */
     private $emitter;
 
     public function __construct(SchedulerEmitter $emitter)
@@ -51,9 +51,9 @@ final class SchedulerMessagesProcessor implements MessageExecutor
         }
 
         if (
-            true === ($message instanceof SchedulerOperationEmitted) ||
-            true === ($message instanceof SchedulerOperationCanceled) ||
-            true === ($message instanceof OperationScheduled)
+            ($message instanceof SchedulerOperationEmitted) === true ||
+            ($message instanceof SchedulerOperationCanceled) === true ||
+            ($message instanceof OperationScheduled) === true
         ) {
             /** @var OperationScheduled|SchedulerOperationCanceled|SchedulerOperationEmitted $message */
 

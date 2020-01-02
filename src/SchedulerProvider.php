@@ -55,8 +55,10 @@ final class SchedulerProvider
         \DateTimeImmutable $executionDate,
         ServiceBusContext $context
     ): Promise {
+        $operation = ScheduledOperation::new($id, $command, $executionDate);
+
         return call(
-            function (ScheduledOperation $operation) use ($context): \Generator
+            function () use ($operation, $context): \Generator
             {
                 try
                 {
@@ -82,8 +84,7 @@ final class SchedulerProvider
                 {
                     throw new OperationSchedulingError($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
-            },
-            ScheduledOperation::new($id, $command, $executionDate)
+            }
         );
     }
 
@@ -97,7 +98,7 @@ final class SchedulerProvider
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {
         return call(
-            function (ScheduledOperationId $id, ServiceBusContext $context, ?string $reason): \Generator
+            function () use ($id, $context, $reason): \Generator
             {
                 try
                 {
@@ -111,10 +112,7 @@ final class SchedulerProvider
                         $throwable
                     );
                 }
-            },
-            $id,
-            $context,
-            $reason
+            }
         );
     }
 

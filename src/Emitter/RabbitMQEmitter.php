@@ -45,9 +45,8 @@ final class RabbitMQEmitter implements SchedulerEmitter
      */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise
     {
-        /** @psalm-suppress InvalidArgument */
         return call(
-            function (ScheduledOperationId $id) use ($context): \Generator
+            function () use ($id, $context): \Generator
             {
                 try
                 {
@@ -65,8 +64,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
-            },
-            $id
+            }
         );
     }
 
@@ -75,13 +73,12 @@ final class RabbitMQEmitter implements SchedulerEmitter
      */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise
     {
-        /** @psalm-suppress InvalidArgument */
         return call(
-            function (?NextScheduledOperation $nextOperation) use ($context): \Generator
+            function () use ($nextOperation, $context): \Generator
             {
                 try
                 {
-                    if (null === $nextOperation)
+                    if ($nextOperation === null)
                     {
                         $context->logContextMessage('Next operation not specified', [], LogLevel::DEBUG);
 
@@ -109,8 +106,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
-            },
-            $nextOperation
+            }
         );
     }
 
@@ -118,7 +114,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
     {
         return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
         {
-            if (null !== $operation)
+            if ($operation !== null)
             {
                 $context->delivery($operation->command)->onResolve(
                     static function () use ($operation, $nextOperation, $context): \Generator

@@ -50,13 +50,11 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise
     {
-        $adapter = $this->adapter;
-
         return call(
-            static function (ScheduledOperationId $id) use ($adapter, $postExtract): \Generator
+            function () use ($id, $postExtract): \Generator
             {
                 /** @var ScheduledOperation|null $operation */
-                $operation = yield from self::load($adapter, $id);
+                $operation = yield from self::load($this->adapter, $id);
 
                 if ($operation === null)
                 {
@@ -66,7 +64,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 }
 
                 /** @var \ServiceBus\Storage\Common\Transaction $transaction */
-                $transaction = yield $adapter->transaction();
+                $transaction = yield $this->adapter->transaction();
 
                 try
                 {
@@ -90,8 +88,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     unset($transaction);
                 }
-            },
-            $id
+            }
         );
     }
 
@@ -100,13 +97,11 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise
     {
-        $adapter = $this->adapter;
-
         return call(
-            static function (ScheduledOperationId $id) use ($adapter, $postRemove): \Generator
+            function () use ($id, $postRemove): \Generator
             {
                 /** @var \ServiceBus\Storage\Common\Transaction $transaction */
-                $transaction = yield $adapter->transaction();
+                $transaction = yield  $this->adapter->transaction();
 
                 try
                 {
@@ -130,8 +125,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     unset($transaction);
                 }
-            },
-            $id
+            }
         );
     }
 
@@ -140,14 +134,12 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise
     {
-        $adapter = $this->adapter;
-
         /** @psalm-suppress InvalidArgument */
         return call(
-            static function (ScheduledOperation $operation) use ($adapter, $postAdd): \Generator
+            function () use ($operation, $postAdd): \Generator
             {
                 /** @var \ServiceBus\Storage\Common\Transaction $transaction */
-                $transaction = yield $adapter->transaction();
+                $transaction = yield  $this->adapter->transaction();
 
                 try
                 {
@@ -181,8 +173,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     unset($transaction);
                 }
-            },
-            $operation
+            }
         );
     }
 
@@ -213,19 +204,17 @@ final class SqlSchedulerStore implements SchedulerStore
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
-        $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
-            yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
+        $resultSet = yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
         /** @psalm-var      array<string, string>|null $result */
-        $result = /** @noinspection PhpUnhandledExceptionInspection */
-            yield fetchOne($resultSet);
+        $result = yield fetchOne($resultSet);
 
-        if (true === \is_array($result) && 0 !== \count($result))
+        if (\is_array($result) === true && \count($result) !== 0)
         {
             /** @var int $affectedRows */
             $affectedRows = yield from self::updateBarrierFlag($queryExecutor, $result['id']);
 
-            if (0 !== $affectedRows)
+            if ($affectedRows !== 0)
             {
                 /** @noinspection PhpUnhandledExceptionInspection */
                 return NextScheduledOperation::fromRow($result);
@@ -261,8 +250,7 @@ final class SqlSchedulerStore implements SchedulerStore
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
-        $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
-            yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
+        $resultSet = yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
         return $resultSet->affectedRows();
     }
@@ -291,12 +279,10 @@ final class SqlSchedulerStore implements SchedulerStore
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
-        $resultSet = /** @noinspection PhpUnhandledExceptionInspection */
-            yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
+        $resultSet = yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
         /** @psalm-var array{processing_date:string, command:string, id:string, is_sent:bool}|null $result */
-        $result = /** @noinspection PhpUnhandledExceptionInspection */
-            yield fetchOne($resultSet);
+        $result = yield fetchOne($resultSet);
 
         if (\is_array($result) === true && \count($result) !== 0)
         {

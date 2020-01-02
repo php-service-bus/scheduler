@@ -19,9 +19,7 @@ use ServiceBus\Scheduler\ScheduledOperationId;
  *
  * @see SchedulerOperationEmitted
  *
- * @internal
- *
- * @psalm-readonly
+ * @psalm-immutable
  */
 final class EmitSchedulerOperation
 {
