@@ -14,7 +14,6 @@ namespace ServiceBus\Scheduler\Store;
 
 use function Amp\asyncCall;
 use function Amp\call;
-use function ServiceBus\Common\datetimeToString;
 use function ServiceBus\Storage\Sql\deleteQuery;
 use function ServiceBus\Storage\Sql\equalsCriteria;
 use function ServiceBus\Storage\Sql\fetchOne;
@@ -145,7 +144,7 @@ final class SqlSchedulerStore implements SchedulerStore
                 {
                     $insertQuery = insertQuery('scheduler_registry', [
                         'id'              => $operation->id->toString(),
-                        'processing_date' => datetimeToString($operation->date),
+                        'processing_date' => $operation->date->format('Y-m-d H:i:s.u'),
                         'command'         => \base64_encode(\serialize($operation->command)),
                         'is_sent'         => (int) $operation->isSent,
                     ]);

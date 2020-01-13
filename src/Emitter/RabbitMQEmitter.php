@@ -26,6 +26,7 @@ use ServiceBus\Scheduler\Exceptions\EmitFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
 use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Scheduler\Store\SchedulerStore;
+use function ServiceBus\Common\now;
 
 /**
  *
@@ -139,14 +140,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
      */
     private function calculateExecutionDelay(NextScheduledOperation $nextScheduledOperation): int
     {
-        /**
-         * @noinspection PhpUnhandledExceptionInspection
-         *
-         * @var \DateTimeImmutable $currentDate
-         */
-        $currentDate = datetimeInstantiator('NOW');
-
-        $executionDelay = $nextScheduledOperation->time->getTimestamp() - $currentDate->getTimestamp();
+        $executionDelay = $nextScheduledOperation->time->getTimestamp() - now()->getTimestamp();
 
         return (int) bcmul((string) $executionDelay, '1000');
     }

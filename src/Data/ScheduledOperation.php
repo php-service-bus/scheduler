@@ -16,6 +16,7 @@ use function ServiceBus\Common\datetimeInstantiator;
 use ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate;
 use ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
+use function ServiceBus\Common\now;
 
 /**
  * Scheduled job data.
@@ -116,10 +117,7 @@ final class ScheduledOperation
     {
         try
         {
-            /** @var \DateTimeImmutable $currentDate */
-            $currentDate = datetimeInstantiator('NOW');
-
-            if ($currentDate >= $dateTime)
+            if (now() >= $dateTime)
             {
                 throw new \InvalidArgumentException(
                     'The date of the scheduled task should be greater than the current one'
