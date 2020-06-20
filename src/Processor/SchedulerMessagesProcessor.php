@@ -38,6 +38,8 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     /**
      * @inheritDoc
      *
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress MixedReturnTypeCoercion
      * @noinspection PhpDocRedundantThrowsInspection
      *
      * @throws \LogicException Unsupported message type specified

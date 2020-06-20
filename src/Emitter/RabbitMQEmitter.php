@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace ServiceBus\Scheduler\Emitter;
 
 use function Amp\call;
-use function ServiceBus\Common\datetimeInstantiator;
 use Amp\Promise;
 use Psr\Log\LogLevel;
 use ServiceBus\Common\Context\ServiceBusContext;
@@ -86,19 +85,18 @@ final class RabbitMQEmitter implements SchedulerEmitter
                         return;
                     }
 
-                    $id    = $nextOperation->id;
                     $delay = $this->calculateExecutionDelay($nextOperation);
 
                     /** Message will return after a specified time interval */
                     yield $context->delivery(
-                        new  EmitSchedulerOperation($id),
+                        new  EmitSchedulerOperation($nextOperation->id),
                         SchedulerDeliveryOptions::scheduledMessage($context->traceId(), $delay)
                     );
 
                     $context->logContextMessage(
                         'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds',
                         [
-                            'scheduledOperationId'    => $id,
+                            'scheduledOperationId'    => $nextOperation->id,
                             'scheduledOperationDelay' => $delay / 1000,
                         ]
                     );
@@ -111,6 +109,9 @@ final class RabbitMQEmitter implements SchedulerEmitter
         );
     }
 
+    /**
+     * @psalm-return callable(?ScheduledOperation, ?NextScheduledOperation): void
+     */
     private function createPostExtract(ServiceBusContext $context): callable
     {
         return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void

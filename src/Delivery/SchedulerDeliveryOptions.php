@@ -47,7 +47,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
     /**
      * {@inheritdoc}
      */
-    public static function create(): DeliveryOptions
+    public static function create(): self
     {
         return new self();
     }
@@ -57,7 +57,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
      */
     public function withTraceId($traceId): void
     {
-        $this->traceId;
+        $this->traceId = $traceId;
     }
 
     /**

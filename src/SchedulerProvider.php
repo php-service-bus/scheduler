@@ -116,6 +116,9 @@ final class SchedulerProvider
         );
     }
 
+    /**
+     * @psalm-return callable(?NextScheduledOperation):\Generator
+     */
     private static function createPostCancel(ServiceBusContext $context, ScheduledOperationId $id, ?string $reason): callable
     {
         return static function (?NextScheduledOperation $nextOperation) use ($id, $reason, $context): \Generator
@@ -126,6 +129,9 @@ final class SchedulerProvider
         };
     }
 
+    /**
+     * @psalm-return callable(ScheduledOperation, ?NextScheduledOperation):\Generator
+     */
     private static function createPostAdd(ServiceBusContext $context): callable
     {
         return static function (ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator

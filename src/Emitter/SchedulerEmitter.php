@@ -26,6 +26,8 @@ interface SchedulerEmitter
      * Emit operation (send scheduled command to destination queue)
      * Deletes the task from the database (@see SchedulerStore::extract()) after the event is sent.
      *
+     * @return Promise<void>
+     *
      * @see SchedulerOperationEmitted event
      *
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
@@ -34,6 +36,8 @@ interface SchedulerEmitter
 
     /**
      * Emit next operation.
+     *
+     * @return Promise<void>
      *
      * @see EmitSchedulerOperation command
      *

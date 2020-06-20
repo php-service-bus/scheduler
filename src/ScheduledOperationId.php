@@ -17,6 +17,7 @@ use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
 
 /**
  * @api
+ * @psalm-immutable
  */
 final class ScheduledOperationId
 {
