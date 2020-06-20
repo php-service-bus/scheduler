@@ -1,7 +1,7 @@
 ## What is it?
-[![Build Status](https://travis-ci.org/php-service-bus/scheduler.svg?branch=v4.0)](https://travis-ci.org/php-service-bus/scheduler)
-[![Code Coverage](https://scrutinizer-ci.com/g/php-service-bus/scheduler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/php-service-bus/scheduler/?branch=4.0)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/php-service-bus/scheduler/badges/quality-score.png?b=4.0)](https://scrutinizer-ci.com/g/php-service-bus/scheduler/?branch=4.0)
+[![Build Status](https://travis-ci.org/php-service-bus/scheduler.svg?branch=v4.1)](https://travis-ci.org/php-service-bus/scheduler)
+[![Code Coverage](https://scrutinizer-ci.com/g/php-service-bus/scheduler/badges/coverage.png?b=v4.1)](https://scrutinizer-ci.com/g/php-service-bus/scheduler/?branch=v4.1)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/php-service-bus/scheduler/badges/quality-score.png?b=v4.1](https://scrutinizer-ci.com/g/php-service-bus/scheduler/?branch=v4.1)
 
 This component is part of the [PHP Service Bus](https://github.com/php-service-bus/service-bus): common scheduler implementation.
 
