@@ -89,14 +89,14 @@ final class RabbitMQEmitter implements SchedulerEmitter
 
                     /** Message will return after a specified time interval */
                     yield $context->delivery(
-                        new  EmitSchedulerOperation($nextOperation->id),
+                        new EmitSchedulerOperation($nextOperation->id),
                         SchedulerDeliveryOptions::scheduledMessage($context->traceId(), $delay)
                     );
 
                     $context->logContextMessage(
                         'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds',
                         [
-                            'scheduledOperationId'    => $nextOperation->id,
+                            'scheduledOperationId'    => $nextOperation->id->toString(),
                             'scheduledOperationDelay' => $delay / 1000,
                         ]
                     );
@@ -110,27 +110,23 @@ final class RabbitMQEmitter implements SchedulerEmitter
     }
 
     /**
-     * @psalm-return callable(?ScheduledOperation, ?NextScheduledOperation): void
+     * @psalm-return callable(?ScheduledOperation, ?NextScheduledOperation): \Generator
      */
     private function createPostExtract(ServiceBusContext $context): callable
     {
-        return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): void
+        return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
         {
             if ($operation !== null)
             {
-                $context->delivery($operation->command)->onResolve(
-                    static function () use ($operation, $nextOperation, $context): \Generator
-                    {
-                        $context->logContextMessage(
-                            'The delayed "{messageClass}" command has been sent to the transport',
-                            [
-                                'messageClass'         => \get_class($operation->command),
-                                'scheduledOperationId' => $operation->id->toString(),
-                            ]
-                        );
+                yield $context->delivery($operation->command);
+                yield $context->delivery(new SchedulerOperationEmitted($operation->id, $nextOperation));
 
-                        yield $context->delivery(new SchedulerOperationEmitted($operation->id, $nextOperation));
-                    }
+                $context->logContextMessage(
+                    'The delayed "{messageClass}" command has been sent to the transport',
+                    [
+                        'messageClass'         => \get_class($operation->command),
+                        'scheduledOperationId' => $operation->id->toString(),
+                    ]
                 );
             }
         };

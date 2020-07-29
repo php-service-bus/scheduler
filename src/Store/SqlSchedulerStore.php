@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Store;
 
-use function Amp\asyncCall;
 use function Amp\call;
 use function ServiceBus\Storage\Sql\deleteQuery;
 use function ServiceBus\Storage\Sql\equalsCriteria;
@@ -62,31 +61,12 @@ final class SqlSchedulerStore implements SchedulerStore
                     );
                 }
 
-                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
-                $transaction = yield $this->adapter->transaction();
+                yield from self::delete($this->adapter, $id);
 
-                try
-                {
-                    yield from self::delete($transaction, $id);
+                /** @var NextScheduledOperation|null $nextOperation */
+                $nextOperation = yield from self::fetchNextOperation($this->adapter);
 
-                    /** @var NextScheduledOperation|null $nextOperation */
-                    $nextOperation = yield from self::fetchNextOperation($transaction);
-
-                    /** @psalm-suppress InvalidArgument */
-                    asyncCall($postExtract, $operation, $nextOperation);
-
-                    yield $transaction->commit();
-                }
-                catch (\Throwable $throwable)
-                {
-                    yield $transaction->rollback();
-
-                    throw $throwable;
-                }
-                finally
-                {
-                    unset($transaction);
-                }
+                yield from $postExtract($operation, $nextOperation);
             }
         );
     }
@@ -99,31 +79,12 @@ final class SqlSchedulerStore implements SchedulerStore
         return call(
             function () use ($id, $postRemove): \Generator
             {
-                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
-                $transaction = yield  $this->adapter->transaction();
+                yield from self::delete($this->adapter, $id);
 
-                try
-                {
-                    yield from self::delete($transaction, $id);
+                /** @var NextScheduledOperation|null $nextOperation */
+                $nextOperation = yield from self::fetchNextOperation($this->adapter);
 
-                    /** @var NextScheduledOperation|null $nextOperation */
-                    $nextOperation = yield from self::fetchNextOperation($transaction);
-
-                    /** @psalm-suppress InvalidArgument */
-                    asyncCall($postRemove, $nextOperation);
-
-                    yield $transaction->commit();
-                }
-                catch (\Throwable $throwable)
-                {
-                    yield $transaction->rollback();
-
-                    throw $throwable;
-                }
-                finally
-                {
-                    unset($transaction);
-                }
+                yield from $postRemove($nextOperation);
             }
         );
     }
@@ -137,41 +98,22 @@ final class SqlSchedulerStore implements SchedulerStore
         return call(
             function () use ($operation, $postAdd): \Generator
             {
-                /** @var \ServiceBus\Storage\Common\Transaction $transaction */
-                $transaction = yield  $this->adapter->transaction();
+                $insertQuery = insertQuery('scheduler_registry', [
+                    'id'              => $operation->id->toString(),
+                    'processing_date' => $operation->date->format('Y-m-d H:i:s.u'),
+                    'command'         => \base64_encode(\serialize($operation->command)),
+                    'is_sent'         => (int) $operation->isSent,
+                ]);
 
-                try
-                {
-                    $insertQuery = insertQuery('scheduler_registry', [
-                        'id'              => $operation->id->toString(),
-                        'processing_date' => $operation->date->format('Y-m-d H:i:s.u'),
-                        'command'         => \base64_encode(\serialize($operation->command)),
-                        'is_sent'         => (int) $operation->isSent,
-                    ]);
+                $compiledQuery = $insertQuery->compile();
 
-                    $compiledQuery = $insertQuery->compile();
+                /** @psalm-suppress MixedTypeCoercion Invalid params() docblock */
+                yield $this->adapter->execute($compiledQuery->sql(), $compiledQuery->params());
 
-                    /** @psalm-suppress MixedTypeCoercion Invalid params() docblock */
-                    yield $transaction->execute($compiledQuery->sql(), $compiledQuery->params());
+                /** @var NextScheduledOperation|null $nextOperation */
+                $nextOperation = yield from self::fetchNextOperation($this->adapter);
 
-                    /** @var NextScheduledOperation|null $nextOperation */
-                    $nextOperation = yield from self::fetchNextOperation($transaction);
-
-                    /** @psalm-suppress InvalidArgument */
-                    asyncCall($postAdd, $operation, $nextOperation);
-
-                    yield $transaction->commit();
-                }
-                catch (\Throwable $throwable)
-                {
-                    yield $transaction->rollback();
-
-                    throw $throwable;
-                }
-                finally
-                {
-                    unset($transaction);
-                }
+                yield from $postAdd($operation, $nextOperation);
             }
         );
     }

@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace ServiceBus\Scheduler\Store;
 
 use Amp\Promise;
-use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\Data\ScheduledOperation;
 use ServiceBus\Scheduler\ScheduledOperationId;
 
@@ -25,7 +24,7 @@ interface SchedulerStore
     /**
      * Extract operation (load and delete).
      *
-     * @psalm-param callable(?ScheduledOperation, ?\ServiceBus\Scheduler\Data\NextScheduledOperation): void $postExtract
+     * @psalm-param callable(?ScheduledOperation, ?\ServiceBus\Scheduler\Data\NextScheduledOperation):\Generator $postExtract
      *
      * @return Promise<void>
      *
