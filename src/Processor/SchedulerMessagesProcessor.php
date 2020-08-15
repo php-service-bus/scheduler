@@ -53,9 +53,9 @@ final class SchedulerMessagesProcessor implements MessageExecutor
         }
 
         if (
-            ($message instanceof SchedulerOperationEmitted) === true ||
-            ($message instanceof SchedulerOperationCanceled) === true ||
-            ($message instanceof OperationScheduled) === true
+            $message instanceof SchedulerOperationEmitted ||
+            $message instanceof SchedulerOperationCanceled ||
+            $message instanceof OperationScheduled
         ) {
             /** @var OperationScheduled|SchedulerOperationCanceled|SchedulerOperationEmitted $message */
 

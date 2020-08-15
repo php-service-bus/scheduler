@@ -5,6 +5,3 @@ parameters:
         -
             message: '#Unable to resolve the template type#'
             path: %currentWorkingDirectory%/src
-        -
-            message: '#but returns#'
-            path: %currentWorkingDirectory%/src/Processor/SchedulerMessagesProcessor.php

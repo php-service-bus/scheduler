@@ -147,10 +147,10 @@ final class SqlSchedulerStore implements SchedulerStore
          */
         $resultSet = yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
-        /** @psalm-var      array<string, string>|null $result */
+        /** @psalm-var array<string, string>|null $result */
         $result = yield fetchOne($resultSet);
 
-        if (\is_array($result) === true && \count($result) !== 0)
+        if ($result !== null)
         {
             /** @var int $affectedRows */
             $affectedRows = yield from self::updateBarrierFlag($queryExecutor, $result['id']);
@@ -225,7 +225,7 @@ final class SqlSchedulerStore implements SchedulerStore
         /** @psalm-var array{processing_date:string, command:string, id:string, is_sent:bool}|null $result */
         $result = yield fetchOne($resultSet);
 
-        if (\is_array($result) === true && \count($result) !== 0)
+        if ($result !== null)
         {
             if ($queryExecutor instanceof BinaryDataDecoder)
             {

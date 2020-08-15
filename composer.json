@@ -29,14 +29,16 @@
   "require": {
     "php": ">=7.4",
     "ext-bcmath": "*",
-    "amphp/amp": "v2.4.*",
+    "amphp/amp": "v2.5.*",
     "php-service-bus/common": "v4.1.*",
-    "php-service-bus/storage": "v4.1.*"
+    "php-service-bus/storage": "v4.1.*",
+    "php-service-bus/messages-router": "v4.1.*"
   },
   "require-dev": {
     "php-service-bus/code-style-config": "v1.2.*",
-    "phpunit/phpunit": "v9.1.*",
-    "vimeo/psalm": "v3.11.*",
+    "symfony/dependency-injection": "v5.1.*",
+    "phpunit/phpunit": "v9.2.*",
+    "vimeo/psalm": "v3.13.*",
     "phpstan/phpstan": "v0.12.*"
   },
   "prefer-stable": true,

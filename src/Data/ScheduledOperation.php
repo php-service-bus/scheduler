@@ -79,12 +79,12 @@ final class ScheduledOperation
 
         $serializedCommand = \base64_decode($data['command']);
 
-        if (true === \is_string($serializedCommand))
+        if (\is_string($serializedCommand))
         {
             /** @var false|object $command */
             $command = \unserialize($serializedCommand, ['allowed_classes' => true]);
 
-            if (true === \is_object($command))
+            if (\is_object($command))
             {
                 return new self(
                     ScheduledOperationId::restore($data['id']),
