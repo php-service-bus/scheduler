@@ -46,10 +46,14 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     * @see https://github.com/vimeo/psalm/issues/5070
      */
-    public static function create(): self
+    public static function create(): static
     {
-        return new self();
+        return new static();
     }
 
     /**
@@ -65,14 +69,13 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
      */
     public function withHeader(string $key, $value): void
     {
-        /** @psalm-suppress MixedTypeCoercion */
         $this->headers[$key] = $value;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function traceId()
+    public function traceId(): mixed
     {
         return $this->traceId;
     }

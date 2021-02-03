@@ -4,7 +4,7 @@
         useDocblockTypes="true"
         useDocblockPropertyTypes="true"
         allowPhpStormGenerics="true"
-        requireVoidReturnType="true"
+        findUnusedPsalmSuppress="true"
         strictBinaryOperands="true"
         ignoreInternalFunctionFalseReturn="false"
         ignoreInternalFunctionNullReturn="false"

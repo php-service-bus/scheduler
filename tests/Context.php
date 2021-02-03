@@ -25,19 +25,9 @@ use ServiceBus\Common\Endpoint\DeliveryOptions;
 final class Context implements ServiceBusContext
 {
     /**
-     * @psalm-var array<array-key, \ServiceBus\Common\Messages\Message>
-     *
      * @var object[]
      */
     public $messages = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isValid(): bool
-    {
-        return true;
-    }
 
     /**
      * {@inheritdoc}
@@ -90,7 +80,7 @@ final class Context implements ServiceBusContext
     /**
      * {@inheritdoc}
      */
-    public function operationId(): string
+    public function messageId(): string
     {
         return uuid();
     }

@@ -94,7 +94,6 @@ final class SqlSchedulerStore implements SchedulerStore
      */
     public function add(ScheduledOperation $operation, callable $postAdd): Promise
     {
-        /** @psalm-suppress InvalidArgument */
         return call(
             function () use ($operation, $postAdd): \Generator
             {
@@ -107,7 +106,7 @@ final class SqlSchedulerStore implements SchedulerStore
 
                 $compiledQuery = $insertQuery->compile();
 
-                /** @psalm-suppress MixedTypeCoercion Invalid params() docblock */
+                /** @psalm-suppress MixedArgumentTypeCoercion Invalid params() docblock */
                 yield $this->adapter->execute($compiledQuery->sql(), $compiledQuery->params());
 
                 /** @var NextScheduledOperation|null $nextOperation */
@@ -119,8 +118,6 @@ final class SqlSchedulerStore implements SchedulerStore
     }
 
     /**
-     * @noinspection PhpDocMissingThrowsInspection
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
@@ -141,7 +138,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $compiledQuery = $selectQuery->compile();
 
         /**
-         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+         * @psalm-suppress MixedArgumentTypeCoercion Invalid params() docblock
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
@@ -166,8 +163,6 @@ final class SqlSchedulerStore implements SchedulerStore
     /**
      * Update task is_sent flag.
      *
-     * @noinspection PhpDocMissingThrowsInspection
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
      * @throws \ServiceBus\Storage\Common\Exceptions\ResultSetIterationFailed
@@ -187,7 +182,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $compiledQuery = $updateQuery->compile();
 
         /**
-         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+         * @psalm-suppress MixedArgumentTypeCoercion Invalid params() docblock
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
@@ -198,8 +193,6 @@ final class SqlSchedulerStore implements SchedulerStore
 
     /**
      * Load scheduled operation.
-     *
-     * @noinspection PhpDocMissingThrowsInspection
      *
      * @throws \ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
@@ -216,7 +209,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $compiledQuery = $selectQuery->compile();
 
         /**
-         * @psalm-suppress MixedTypeCoercion Invalid params() docblock
+         * @psalm-suppress MixedArgumentTypeCoercion Invalid params() docblock
          *
          * @var \ServiceBus\Storage\Common\ResultSet $resultSet
          */
@@ -242,8 +235,6 @@ final class SqlSchedulerStore implements SchedulerStore
     /**
      * Delete scheduled operation.
      *
-     * @noinspection PhpDocMissingThrowsInspection
-     *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\IncorrectParameterCast
      * @throws \ServiceBus\Storage\Common\Exceptions\InvalidConfigurationOptions
@@ -254,7 +245,7 @@ final class SqlSchedulerStore implements SchedulerStore
         $deleteQuery   = deleteQuery(self::TABLE_NAME)->where(equalsCriteria('id', $id->toString()));
         $compiledQuery = $deleteQuery->compile();
 
-        /** @psalm-suppress MixedTypeCoercion Invalid params() docblock */
+        /** @psalm-suppress MixedArgumentTypeCoercion Invalid params() docblock */
         yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
     }
 }

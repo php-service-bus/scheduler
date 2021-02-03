@@ -90,7 +90,7 @@ final class ScheduledOperation
                     ScheduledOperationId::restore($data['id']),
                     $command,
                     $dateTime,
-                    (bool) $data['is_sent']
+                    $data['is_sent']
                 );
             }
         }

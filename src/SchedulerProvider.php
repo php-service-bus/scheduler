@@ -137,7 +137,7 @@ final class SchedulerProvider
         return static function (ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
         {
             /** @psalm-var class-string $commandClass */
-            $commandClass = (string) \get_class($operation->command);
+            $commandClass = \get_class($operation->command);
 
             yield $context->delivery(
                 new OperationScheduled(
