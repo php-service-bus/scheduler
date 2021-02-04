@@ -3,5 +3,5 @@ parameters:
     checkMissingIterableValueType: false
     ignoreErrors:
         -
-            message: '#Unable to resolve the template type#'
-            path: %currentWorkingDirectory%/src
+            message: '#SchedulerDeliveryOptions#'
+            path: %currentWorkingDirectory%/src/Delivery/SchedulerDeliveryOptions.php

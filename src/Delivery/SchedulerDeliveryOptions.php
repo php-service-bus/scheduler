@@ -3,113 +3,74 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Delivery;
 
 use ServiceBus\Common\Endpoint\DeliveryOptions;
 
 /**
- * @internal
+ *
  */
 final class SchedulerDeliveryOptions implements DeliveryOptions
 {
     /**
-     * @psalm-var array<string, string|int|float>
+     * @psalm-var array<string, int|float|string|null>
      *
      * @var array
      */
-    private $headers = [];
+    private $headers;
 
-    /**
-     * @var int|string|null
-     */
-    private $traceId;
-
-    /**
-     * @param int|string|null $traceId
-     */
-    public static function scheduledMessage($traceId, int $delay): self
+    public static function scheduledMessage(int $delay): self
     {
-        $self = new self();
-
-        $self->traceId            = $traceId;
-        $self->headers['x-delay'] = $delay;
-
-        return $self;
+        return new self(['x-delay' => $delay]);
     }
 
     /**
-     * {@inheritdoc}
+     * @noinspection PhpUnnecessaryStaticReferenceInspection
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress MoreSpecificReturnType
      */
-    public static function create(): self
+    public static function create(): static
     {
-        return new self();
+        return new self([]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function withTraceId($traceId): void
+    public function withHeader(string $key, int|float|string|null $value): void
     {
-        $this->traceId = $traceId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withHeader(string $key, $value): void
-    {
-        /** @psalm-suppress MixedTypeCoercion */
         $this->headers[$key] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function traceId()
-    {
-        return $this->traceId;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function headers(): array
     {
         return $this->headers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPersistent(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isHighestPriority(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function expirationAfter(): ?int
     {
         return null;
     }
 
-    private function __construct()
+    /**
+     * @psalm-param array<string, int|float|string|null> $headers
+     */
+    private function __construct(array $headers)
     {
+        $this->headers = $headers;
     }
 }

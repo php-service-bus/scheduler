@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Data;
 
@@ -21,14 +21,14 @@ use function ServiceBus\Common\now;
 /**
  * Scheduled job data.
  *
- * @internal
- *
  * @psalm-immutable
  */
 final class ScheduledOperation
 {
     /**
      * Identifier.
+     *
+     * @psalm-readonly
      *
      * @var ScheduledOperationId
      */
@@ -37,6 +37,8 @@ final class ScheduledOperation
     /**
      * Scheduled message.
      *
+     * @psalm-readonly
+     *
      * @var object
      */
     public $command;
@@ -44,12 +46,16 @@ final class ScheduledOperation
     /**
      * Execution date.
      *
+     * @psalm-readonly
+     *
      * @var \DateTimeImmutable
      */
     public $date;
 
     /**
      * The message was sent to the transport.
+     *
+     * @psalm-readonly
      *
      * @var bool
      */
@@ -90,7 +96,7 @@ final class ScheduledOperation
                     ScheduledOperationId::restore($data['id']),
                     $command,
                     $dateTime,
-                    (bool) $data['is_sent']
+                    $data['is_sent']
                 );
             }
         }

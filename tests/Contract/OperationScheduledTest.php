@@ -3,7 +3,7 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
@@ -39,14 +39,14 @@ final class OperationScheduledTest extends TestCase
 
         $operation = new OperationScheduled($id, \get_class($command), $dateTime, $next);
 
-        static::assertNotNull($operation->nextOperation);
+        self::assertNotNull($operation->nextOperation);
 
-        static::assertSame($id, $operation->id);
-        static::assertSame($id, $operation->nextOperation->id);
+        self::assertSame($id, $operation->id);
+        self::assertSame($id, $operation->nextOperation->id);
 
-        static::assertSame($dateTime->format('c'), $operation->executionDate->format('c'));
-        static::assertSame($dateTime->format('c'), $operation->nextOperation->time->format('c'));
+        self::assertSame($dateTime->format('c'), $operation->executionDate->format('c'));
+        self::assertSame($dateTime->format('c'), $operation->nextOperation->time->format('c'));
 
-        static::assertSame(\get_class($command), $operation->commandNamespace);
+        self::assertSame(\get_class($command), $operation->commandNamespace);
     }
 }

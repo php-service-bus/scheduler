@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Module;
 
@@ -31,13 +31,19 @@ final class SchedulerModule implements ServiceBusModule
 {
     private const TYPE = 'rabbitmq';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $adapterType;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $storeImplementationServiceId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $databaseAdapterServiceId;
 
     public static function rabbitMqWithSqlStorage(string $databaseAdapterServiceId): self
@@ -88,7 +94,7 @@ final class SchedulerModule implements ServiceBusModule
             $containerBuilder->addDefinitions([Router::class => new Definition(Router::class)]);
         }
 
-        /** @var Definition $routerConfiguratorDefinition */
+        /** @psalm-var Definition $routerConfiguratorDefinition */
 
         return $routerConfiguratorDefinition;
     }

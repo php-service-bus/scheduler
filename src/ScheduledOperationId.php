@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler;
 
@@ -21,7 +21,9 @@ use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
  */
 final class ScheduledOperationId
 {
-    /** @var string  */
+    /**
+     * @var string
+     */
     private $value;
 
     public static function new(): self

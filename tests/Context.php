@@ -3,7 +3,7 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
@@ -12,10 +12,14 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Tests;
 
-use function ServiceBus\Common\uuid;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
+use ServiceBus\Common\Context\ContextLogger;
+use ServiceBus\Common\Context\Metadata;
+use ServiceBus\Common\Context\ValidationViolations;
 use Amp\Promise;
 use Amp\Success;
-use Psr\Log\LogLevel;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Common\Endpoint\DeliveryOptions;
 
@@ -25,26 +29,23 @@ use ServiceBus\Common\Endpoint\DeliveryOptions;
 final class Context implements ServiceBusContext
 {
     /**
-     * @psalm-var array<array-key, \ServiceBus\Common\Messages\Message>
+     * @psalm-var array<array-key, object>
      *
      * @var object[]
      */
     public $messages = [];
 
     /**
-     * {@inheritdoc}
+     * @var TestHandler
      */
-    public function isValid(): bool
-    {
-        return true;
-    }
+    public $logHandler;
 
     /**
      * {@inheritdoc}
      */
-    public function violations(): array
+    public function violations(): ?ValidationViolations
     {
-        return [];
+        return null;
     }
 
     /**
@@ -58,8 +59,11 @@ final class Context implements ServiceBusContext
     /**
      * {@inheritdoc}
      */
-    public function delivery(object $message, ?DeliveryOptions $deliveryOptions = null): Promise
-    {
+    public function delivery(
+        object $message,
+        ?DeliveryOptions $deliveryOptions = null,
+        ?Metadata $withMetadata = null
+    ): Promise {
         $this->messages[] = $message;
 
         return new Success();
@@ -68,38 +72,24 @@ final class Context implements ServiceBusContext
     /**
      * {@inheritdoc}
      */
-    public function return($secondsDelay = 3): Promise
+    public function return(int $secondsDelay = 3, ?Metadata $withMetadata = null): Promise
     {
         return new Success();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function logContextMessage(string $logMessage, array $extra = [], string $level = LogLevel::INFO): void
+    public function logger(): ContextLogger
     {
+        return new TestContextLogger(new Logger('test', [$this->logHandler]));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function logContextThrowable(\Throwable $throwable, array $extra = [], string $level = LogLevel::ERROR): void
+    public function metadata(): Metadata
     {
+        return new TestMetadata();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function operationId(): string
+    public function __construct()
     {
-        return uuid();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function traceId(): string
-    {
-        return uuid();
+        $this->logHandler = new TestHandler();
+        $this->logHandler->pushProcessor(new PsrLogMessageProcessor());
     }
 }

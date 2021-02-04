@@ -3,7 +3,7 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
@@ -32,7 +32,7 @@ final class SchedulerOperationEmittedTest extends TestCase
 
         $operation = new SchedulerOperationEmitted($id);
 
-        static::assertSame($id, $operation->id);
-        static::assertNull($operation->nextOperation);
+        self::assertSame($id, $operation->id);
+        self::assertNull($operation->nextOperation);
     }
 }

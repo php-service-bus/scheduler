@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Contract;
 
@@ -18,14 +18,14 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Operation successful scheduled.
  *
- * @internal
- *
  * @psalm-immutable
  */
 final class OperationScheduled
 {
     /**
      * Operation identifier.
+     *
+     * @psalm-readonly
      *
      * @var ScheduledOperationId
      */
@@ -34,6 +34,7 @@ final class OperationScheduled
     /**
      * Command namespace.
      *
+     * @psalm-readonly
      * @psalm-var class-string
      *
      * @var string
@@ -43,6 +44,8 @@ final class OperationScheduled
     /**
      * Execution date.
      *
+     * @psalm-readonly
+     *
      * @var \DateTimeImmutable
      */
     public $executionDate;
@@ -50,17 +53,14 @@ final class OperationScheduled
     /**
      * Next operation data.
      *
+     * @psalm-readonly
+     *
      * @var NextScheduledOperation|null
      */
-    public $nextOperation = null;
+    public $nextOperation;
 
     /**
      * @psalm-param class-string $commandNamespace
-     *
-     * @param ScheduledOperationId        $id
-     * @param string                      $commandNamespace
-     * @param \DateTimeImmutable          $executionDate
-     * @param NextScheduledOperation|null $nextOperation
      */
     public function __construct(
         ScheduledOperationId $id,
@@ -74,9 +74,6 @@ final class OperationScheduled
         $this->nextOperation    = $nextOperation;
     }
 
-    /**
-     * Has next operation data.
-     */
     public function hasNextOperation(): bool
     {
         return null !== $this->nextOperation;

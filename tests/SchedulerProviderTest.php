@@ -3,7 +3,7 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
@@ -34,7 +34,7 @@ use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;
 final class SchedulerProviderTest extends TestCase
 {
     /** @var DatabaseAdapter|null */
-    private static $adapter = null;
+    private static $adapter;
 
     /**
      * @var SchedulerStore
@@ -127,12 +127,12 @@ final class SchedulerProviderTest extends TestCase
 
                 $messages = $context->messages;
 
-                static::assertCount(1, $messages);
+                self::assertCount(1, $messages);
 
                 /** @var OperationScheduled $message */
                 $message = \end($messages);
 
-                static::assertInstanceOf(OperationScheduled::class, $message);
+                self::assertInstanceOf(OperationScheduled::class, $message);
             }
         );
     }
@@ -193,17 +193,17 @@ final class SchedulerProviderTest extends TestCase
 
                 $messages = $context->messages;
 
-                static::assertCount(2, $messages);
+                self::assertCount(2, $messages);
 
                 /** @var SchedulerOperationCanceled $message */
                 $message = \end($messages);
 
-                static::assertInstanceOf(SchedulerOperationCanceled::class, $message);
+                self::assertInstanceOf(SchedulerOperationCanceled::class, $message);
 
                 $resultSet  = yield self::$adapter->execute('SELECT count(id) as cnt from scheduler_registry');
                 $operations = yield fetchOne($resultSet);
 
-                static::assertSame(0, (int) $operations['cnt']);
+                self::assertSame(0, (int) $operations['cnt']);
             }
         );
     }
@@ -222,7 +222,7 @@ final class SchedulerProviderTest extends TestCase
 
                 yield $this->provider->cancel(ScheduledOperationId::new(), $context);
 
-                static::assertCount(1, $context->messages);
+                self::assertCount(1, $context->messages);
             }
         );
     }

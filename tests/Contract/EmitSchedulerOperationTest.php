@@ -3,7 +3,7 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
@@ -30,8 +30,6 @@ final class EmitSchedulerOperationTest extends TestCase
     {
         $id = ScheduledOperationId::new();
 
-        new EmitSchedulerOperation($id);
-
-        static::assertSame($id, (new EmitSchedulerOperation($id))->id);
+        self::assertSame($id, (new EmitSchedulerOperation($id))->id);
     }
 }

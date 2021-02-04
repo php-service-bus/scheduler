@@ -3,7 +3,7 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
@@ -32,8 +32,8 @@ final class SchedulerOperationCanceledTest extends TestCase
 
         $operation = new SchedulerOperationCanceled($id, 'test');
 
-        static::assertSame($id, $operation->id);
-        static::assertSame('test', $operation->reason);
-        static::assertNull($operation->nextOperation);
+        self::assertSame($id, $operation->id);
+        self::assertSame('test', $operation->reason);
+        self::assertNull($operation->nextOperation);
     }
 }

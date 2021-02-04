@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Processor;
 
@@ -21,13 +21,16 @@ use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
 use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
+use function Amp\call;
 
 /**
  * Scheduler listener\command handler.
  */
 final class SchedulerMessagesProcessor implements MessageExecutor
 {
-    /** @var SchedulerEmitter */
+    /**
+     * @var SchedulerEmitter
+     */
     private $emitter;
 
     public function __construct(SchedulerEmitter $emitter)
@@ -36,34 +39,37 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     }
 
     /**
-     * @inheritDoc
-     *
-     * @psalm-suppress InvalidReturnStatement
-     * @psalm-suppress MixedReturnTypeCoercion
-     * @noinspection PhpDocRedundantThrowsInspection
-     *
      * @throws \LogicException Unsupported message type specified
      * @throws \ServiceBus\Scheduler\Exceptions\EmitFailed
      */
     public function __invoke(object $message, ServiceBusContext $context): Promise
     {
-        if ($message instanceof EmitSchedulerOperation)
-        {
-            return $this->emitter->emit($message->id, $context);
-        }
+        return call(
+            function () use ($message, $context): \Generator
+            {
+                if ($message instanceof EmitSchedulerOperation)
+                {
+                    yield $this->emitter->emit($message->id, $context);
 
-        if (
-            $message instanceof SchedulerOperationEmitted ||
-            $message instanceof SchedulerOperationCanceled ||
-            $message instanceof OperationScheduled
-        ) {
-            /** @var OperationScheduled|SchedulerOperationCanceled|SchedulerOperationEmitted $message */
+                    return;
+                }
 
-            return $this->emitter->emitNextOperation($message->nextOperation, $context);
-        }
+                if (
+                    $message instanceof SchedulerOperationEmitted ||
+                    $message instanceof SchedulerOperationCanceled ||
+                    $message instanceof OperationScheduled
+                ) {
+                    /** @var OperationScheduled|SchedulerOperationCanceled|SchedulerOperationEmitted $message */
 
-        return new Failure(
-            new \LogicException(\sprintf('Unsupported message type specified (%s)', \get_class($message)))
+                    yield $this->emitter->emitNextOperation($message->nextOperation, $context);
+
+                    return;
+                }
+
+                throw new \LogicException(
+                    \sprintf('Unsupported message type specified (%s)', \get_class($message))
+                );
+            }
         );
     }
 }

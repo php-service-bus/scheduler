@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Contract;
 
@@ -18,14 +18,14 @@ use ServiceBus\Scheduler\ScheduledOperationId;
 /**
  * Scheduler operation canceled.
  *
- * @internal
- *
  * @psalm-immutable
  */
 final class SchedulerOperationCanceled
 {
     /**
      * Operation identifier.
+     *
+     * @psalm-readonly
      *
      * @var ScheduledOperationId
      */
@@ -34,16 +34,20 @@ final class SchedulerOperationCanceled
     /**
      * Reason.
      *
+     * @psalm-readonly
+     *
      * @var string|null
      */
-    public $reason = null;
+    public $reason;
 
     /**
      * Next operation data.
      *
+     * @psalm-readonly
+     *
      * @var NextScheduledOperation|null
      */
-    public $nextOperation = null;
+    public $nextOperation;
 
     /**
      * @param ScheduledOperationId        $id

@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Emitter;
 
@@ -32,7 +32,9 @@ use function ServiceBus\Common\now;
  */
 final class RabbitMQEmitter implements SchedulerEmitter
 {
-    /** @var SchedulerStore */
+    /**
+     * @var SchedulerStore
+     */
     private $store;
 
     public function __construct(SchedulerStore $store)
@@ -40,9 +42,6 @@ final class RabbitMQEmitter implements SchedulerEmitter
         $this->store = $store;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise
     {
         return call(
@@ -54,7 +53,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 }
                 catch (ScheduledOperationNotFound $exception)
                 {
-                    $context->logContextThrowable($exception);
+                    $context->logger()->contextThrowable($exception);
 
                     yield $context->delivery(
                         new SchedulerOperationEmitted($id)
@@ -68,9 +67,6 @@ final class RabbitMQEmitter implements SchedulerEmitter
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise
     {
         return call(
@@ -80,7 +76,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 {
                     if ($nextOperation === null)
                     {
-                        $context->logContextMessage('Next operation not specified', [], LogLevel::DEBUG);
+                        $context->logger()->contextMessage('Next operation not specified', [], LogLevel::DEBUG);
 
                         return;
                     }
@@ -90,10 +86,10 @@ final class RabbitMQEmitter implements SchedulerEmitter
                     /** Message will return after a specified time interval */
                     yield $context->delivery(
                         new EmitSchedulerOperation($nextOperation->id),
-                        SchedulerDeliveryOptions::scheduledMessage($context->traceId(), $delay)
+                        SchedulerDeliveryOptions::scheduledMessage($delay)
                     );
 
-                    $context->logContextMessage(
+                    $context->logger()->contextMessage(
                         'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds',
                         [
                             'scheduledOperationId'    => $nextOperation->id->toString(),
@@ -121,7 +117,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 yield $context->delivery($operation->command);
                 yield $context->delivery(new SchedulerOperationEmitted($operation->id, $nextOperation));
 
-                $context->logContextMessage(
+                $context->logger()->contextMessage(
                     'The delayed "{messageClass}" command has been sent to the transport',
                     [
                         'messageClass'         => \get_class($operation->command),

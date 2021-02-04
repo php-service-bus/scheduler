@@ -3,12 +3,12 @@
 /**
  * Scheduler implementation.
  *
- * @author  Maksim Masiukevich <dev@async-php.com>
+ * @author  Maksim Masiukevich <contacts@desperado.dev>
  * @license MIT
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler;
 
@@ -32,7 +32,9 @@ use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
  */
 final class SchedulerProvider
 {
-    /** @var SchedulerStore */
+    /**
+     * @var SchedulerStore
+     */
     private $store;
 
     public function __construct(SchedulerStore $store)
@@ -42,8 +44,6 @@ final class SchedulerProvider
 
     /**
      * Schedule command execution.
-     *
-     * @noinspection PhpDocRedundantThrowsInspection
      *
      * @throws \ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate
      * @throws \ServiceBus\Scheduler\Exceptions\DuplicateScheduledOperation
@@ -64,7 +64,7 @@ final class SchedulerProvider
                 {
                     yield $this->store->add($operation, self::createPostAdd($context));
 
-                    $context->logContextMessage(
+                    $context->logger()->contextMessage(
                         'Operation "{messageClass}" successfully scheduled for {executionDate}',
                         [
                             'messageClass'  => \get_class($operation->command),
@@ -90,8 +90,6 @@ final class SchedulerProvider
 
     /**
      * Cancel scheduled job.
-     *
-     * @noinspection PhpDocRedundantThrowsInspection
      *
      * @throws \ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation
      */
@@ -137,7 +135,7 @@ final class SchedulerProvider
         return static function (ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
         {
             /** @psalm-var class-string $commandClass */
-            $commandClass = (string) \get_class($operation->command);
+            $commandClass = \get_class($operation->command);
 
             yield $context->delivery(
                 new OperationScheduled(
