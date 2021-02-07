@@ -64,8 +64,7 @@ final class Context implements ServiceBusContext
         object $message,
         ?DeliveryOptions $deliveryOptions = null,
         ?OutcomeMessageMetadata $withMetadata = null
-    ): Promise
-    {
+    ): Promise {
         $this->messages[] = $message;
 
         return new Success();
@@ -75,8 +74,7 @@ final class Context implements ServiceBusContext
         array $messages,
         ?DeliveryOptions $deliveryOptions = null,
         ?OutcomeMessageMetadata $withMetadata = null
-    ): Promise
-    {
+    ): Promise {
         $this->messages = \array_merge($this->messages, $messages);
 
         return new Success();

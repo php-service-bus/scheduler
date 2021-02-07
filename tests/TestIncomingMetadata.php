@@ -46,6 +46,4 @@ final class TestIncomingMetadata implements IncomingMessageMetadata
     {
         return [];
     }
-
-
 }
