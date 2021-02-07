@@ -16,7 +16,8 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use ServiceBus\Common\Context\ContextLogger;
-use ServiceBus\Common\Context\Metadata;
+use ServiceBus\Common\Context\IncomingMessageMetadata;
+use ServiceBus\Common\Context\OutcomeMessageMetadata;
 use ServiceBus\Common\Context\ValidationViolations;
 use Amp\Promise;
 use Amp\Success;
@@ -62,17 +63,30 @@ final class Context implements ServiceBusContext
     public function delivery(
         object $message,
         ?DeliveryOptions $deliveryOptions = null,
-        ?Metadata $withMetadata = null
-    ): Promise {
+        ?OutcomeMessageMetadata $withMetadata = null
+    ): Promise
+    {
         $this->messages[] = $message;
 
         return new Success();
     }
 
+    public function deliveryBulk(
+        array $messages,
+        ?DeliveryOptions $deliveryOptions = null,
+        ?OutcomeMessageMetadata $withMetadata = null
+    ): Promise
+    {
+        $this->messages = \array_merge($this->messages, $messages);
+
+        return new Success();
+    }
+
+
     /**
      * {@inheritdoc}
      */
-    public function return(int $secondsDelay = 3, ?Metadata $withMetadata = null): Promise
+    public function return(int $secondsDelay = 3, ?OutcomeMessageMetadata $withMetadata = null): Promise
     {
         return new Success();
     }
@@ -82,9 +96,9 @@ final class Context implements ServiceBusContext
         return new TestContextLogger(new Logger('test', [$this->logHandler]));
     }
 
-    public function metadata(): Metadata
+    public function metadata(): IncomingMessageMetadata
     {
-        return new TestMetadata();
+        return new TestIncomingMetadata();
     }
 
     public function __construct()

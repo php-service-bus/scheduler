@@ -24,12 +24,7 @@ final class TestContextLogger implements ContextLogger
         $this->logger = $logger;
     }
 
-    public function contextMessage(string $logMessage, array $extra = [], string $level = LogLevel::INFO): void
-    {
-        $this->log($level, $logMessage, $extra);
-    }
-
-    public function contextThrowable(\Throwable $throwable, array $extra = [], string $level = LogLevel::ERROR): void
+    public function throwable(\Throwable $throwable, array $extra = [], string $level = LogLevel::ERROR): void
     {
         $this->log($level, throwableMessage($throwable), $extra);
     }

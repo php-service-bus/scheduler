@@ -4,16 +4,15 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Tests;
 
-use ServiceBus\Common\Context\Metadata;
+use ServiceBus\Common\Context\IncomingMessageMetadata;
 use function ServiceBus\Common\uuid;
 
 /**
  *
  */
-final class TestMetadata implements Metadata
+final class TestIncomingMetadata implements IncomingMessageMetadata
 {
-    /** @noinspection PhpUnnecessaryStaticReferenceInspection */
-    public static function create(string $messageId, string $traceId, array $variables): static
+    public static function create(string $messageId, array $variables): self
     {
         return new self();
     }
@@ -37,4 +36,16 @@ final class TestMetadata implements Metadata
     {
         return null;
     }
+
+    public function with(string $key, float|bool|int|string|null $value): IncomingMessageMetadata
+    {
+        return new self();
+    }
+
+    public function variables(): array
+    {
+        return [];
+    }
+
+
 }
