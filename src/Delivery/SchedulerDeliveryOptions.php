@@ -31,19 +31,17 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
         return new self(['x-delay' => $delay]);
     }
 
-    /**
-     * @noinspection PhpUnnecessaryStaticReferenceInspection
-     * @psalm-suppress LessSpecificReturnStatement
-     * @psalm-suppress MoreSpecificReturnType
-     */
-    public static function create(): static
+    public static function create(): self
     {
         return new self([]);
     }
 
-    public function withHeader(string $key, int|float|string|null $value): void
+    public function withHeader(string $key, int|float|string|null $value): self
     {
-        $this->headers[$key] = $value;
+        $headers = $this->headers;
+        $headers[$key] = $value;
+
+        return new self($headers);
     }
 
     public function headers(): array

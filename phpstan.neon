@@ -1,7 +1,3 @@
 parameters:
     checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false
-    ignoreErrors:
-        -
-            message: '#SchedulerDeliveryOptions#'
-            path: %currentWorkingDirectory%/src/Delivery/SchedulerDeliveryOptions.php

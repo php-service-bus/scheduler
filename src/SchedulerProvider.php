@@ -64,7 +64,7 @@ final class SchedulerProvider
                 {
                     yield $this->store->add($operation, self::createPostAdd($context));
 
-                    $context->logger()->contextMessage(
+                    $context->logger()->debug(
                         'Operation "{messageClass}" successfully scheduled for {executionDate}',
                         [
                             'messageClass'  => \get_class($operation->command),

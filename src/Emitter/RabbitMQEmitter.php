@@ -14,7 +14,6 @@ namespace ServiceBus\Scheduler\Emitter;
 
 use function Amp\call;
 use Amp\Promise;
-use Psr\Log\LogLevel;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
 use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
@@ -53,7 +52,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 }
                 catch (ScheduledOperationNotFound $exception)
                 {
-                    $context->logger()->contextThrowable($exception);
+                    $context->logger()->throwable($exception);
 
                     yield $context->delivery(
                         new SchedulerOperationEmitted($id)
@@ -76,7 +75,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 {
                     if ($nextOperation === null)
                     {
-                        $context->logger()->contextMessage('Next operation not specified', [], LogLevel::DEBUG);
+                        $context->logger()->debug('Next operation not specified');
 
                         return;
                     }
@@ -89,7 +88,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                         SchedulerDeliveryOptions::scheduledMessage($delay)
                     );
 
-                    $context->logger()->contextMessage(
+                    $context->logger()->debug(
                         'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds',
                         [
                             'scheduledOperationId'    => $nextOperation->id->toString(),
@@ -117,7 +116,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                 yield $context->delivery($operation->command);
                 yield $context->delivery(new SchedulerOperationEmitted($operation->id, $nextOperation));
 
-                $context->logger()->contextMessage(
+                $context->logger()->debug(
                     'The delayed "{messageClass}" command has been sent to the transport',
                     [
                         'messageClass'         => \get_class($operation->command),

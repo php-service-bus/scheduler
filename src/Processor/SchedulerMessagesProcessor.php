@@ -12,7 +12,6 @@ declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Processor;
 
-use Amp\Failure;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Common\MessageExecutor\MessageExecutor;
