@@ -41,25 +41,16 @@ final class Context implements ServiceBusContext
      */
     public $logHandler;
 
-    /**
-     * {@inheritdoc}
-     */
     public function violations(): ?ValidationViolations
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function headers(): array
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delivery(
         object $message,
         ?DeliveryOptions $deliveryOptions = null,
@@ -80,10 +71,6 @@ final class Context implements ServiceBusContext
         return new Success();
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function return(int $secondsDelay = 3, ?OutcomeMessageMetadata $withMetadata = null): Promise
     {
         return new Success();
