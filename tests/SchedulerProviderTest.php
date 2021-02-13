@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace ServiceBus\Scheduler\Tests;
 
-use Amp\Loop;
 use function Amp\Promise\wait;
 use function ServiceBus\Storage\Sql\fetchOne;
 use PHPUnit\Framework\TestCase;
