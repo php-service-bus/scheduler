@@ -14,6 +14,7 @@ namespace ServiceBus\Scheduler\Processor;
 
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
+use ServiceBus\Common\EntryPoint\Retry\RetryStrategy;
 use ServiceBus\Common\MessageExecutor\MessageExecutor;
 use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
@@ -35,6 +36,16 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     public function __construct(SchedulerEmitter $emitter)
     {
         $this->emitter = $emitter;
+    }
+
+    public function id(): string
+    {
+        return \sha1(\sprintf('%s:%s', __CLASS__, __METHOD__));
+    }
+
+    public function retryStrategy(): ?RetryStrategy
+    {
+        return null;
     }
 
     /**
