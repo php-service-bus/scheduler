@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 /**
  * Scheduler implementation.
@@ -33,7 +33,9 @@ use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;
  */
 final class SchedulerProviderTest extends TestCase
 {
-    /** @var DatabaseAdapter|null */
+    /**
+     * @var DatabaseAdapter|null
+     */
     private static $adapter;
 
     /**
@@ -46,9 +48,6 @@ final class SchedulerProviderTest extends TestCase
      */
     private $provider;
 
-    /**
-     * @throws \Throwable
-     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -60,9 +59,6 @@ final class SchedulerProviderTest extends TestCase
         );
     }
 
-    /**
-     * @throws \Throwable
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -71,9 +67,6 @@ final class SchedulerProviderTest extends TestCase
         $this->provider = new SchedulerProvider($this->store);
     }
 
-    /**
-     * @throws \Throwable
-     */
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -85,145 +78,120 @@ final class SchedulerProviderTest extends TestCase
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function scheduleWithWrongDate(): void
     {
         $this->expectException(InvalidScheduledOperationExecutionDate::class);
         $this->expectExceptionMessage('The date of the scheduled task should be greater than the current one');
 
-        Loop::run(
-            function (): \Generator
-            {
-                yield $this->provider->schedule(
-                    ScheduledOperationId::new(),
-                    new EmptyCommand(),
-                    new \DateTimeImmutable('-1 days'),
-                    new Context()
-                );
-            }
+        wait(
+            $this->provider->schedule(
+                ScheduledOperationId::new(),
+                new EmptyCommand(),
+                new \DateTimeImmutable('-1 days'),
+                new Context()
+            )
         );
     }
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function successSchedule(): void
     {
-        Loop::run(
-            function (): \Generator
-            {
-                $context = new Context();
+        $context = new Context();
 
-                yield $this->provider->schedule(
-                    ScheduledOperationId::new(),
-                    new EmptyCommand(),
-                    new \DateTimeImmutable('+1 days'),
-                    $context
-                );
-
-                $messages = $context->messages;
-
-                self::assertCount(1, $messages);
-
-                /** @var OperationScheduled $message */
-                $message = \end($messages);
-
-                self::assertInstanceOf(OperationScheduled::class, $message);
-            }
+        wait(
+            $this->provider->schedule(
+                ScheduledOperationId::new(),
+                new EmptyCommand(),
+                new \DateTimeImmutable('+1 days'),
+                $context
+            )
         );
+
+        $messages = $context->messages;
+
+        self::assertCount(1, $messages);
+
+        /** @var OperationScheduled $message */
+        $message = \end($messages);
+
+        self::assertInstanceOf(OperationScheduled::class, $message);
     }
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function scheduleDuplicateOperation(): void
     {
         $this->expectException(DuplicateScheduledOperation::class);
 
-        Loop::run(
-            function (): \Generator
-            {
-                $id      = ScheduledOperationId::new();
-                $context = new Context();
+        $id      = ScheduledOperationId::new();
+        $context = new Context();
 
-                yield $this->provider->schedule(
-                    $id,
-                    new EmptyCommand(),
-                    new \DateTimeImmutable('+1 days'),
-                    $context
-                );
+        wait(
+            $this->provider->schedule(
+                $id,
+                new EmptyCommand(),
+                new \DateTimeImmutable('+1 days'),
+                $context
+            )
+        );
 
-                yield $this->provider->schedule(
-                    $id,
-                    new EmptyCommand(),
-                    new \DateTimeImmutable('+1 days'),
-                    $context
-                );
-            }
+        wait(
+            $this->provider->schedule(
+                $id,
+                new EmptyCommand(),
+                new \DateTimeImmutable('+1 days'),
+                $context
+            )
         );
     }
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function cancelScheduledOperation(): void
     {
-        Loop::run(
-            function (): \Generator
-            {
-                $id      = ScheduledOperationId::new();
-                $context = new Context();
+        $id      = ScheduledOperationId::new();
+        $context = new Context();
 
-                yield $this->provider->schedule(
-                    $id,
-                    new EmptyCommand(),
-                    new \DateTimeImmutable('+1 days'),
-                    $context
-                );
-
-                yield $this->provider->cancel($id, $context);
-
-                $messages = $context->messages;
-
-                self::assertCount(2, $messages);
-
-                /** @var SchedulerOperationCanceled $message */
-                $message = \end($messages);
-
-                self::assertInstanceOf(SchedulerOperationCanceled::class, $message);
-
-                $resultSet  = yield self::$adapter->execute('SELECT count(id) as cnt from scheduler_registry');
-                $operations = yield fetchOne($resultSet);
-
-                self::assertSame(0, (int) $operations['cnt']);
-            }
+        wait(
+            $this->provider->schedule(
+                $id,
+                new EmptyCommand(),
+                new \DateTimeImmutable('+1 days'),
+                $context
+            )
         );
+
+        wait($this->provider->cancel($id, $context));
+
+        $messages = $context->messages;
+
+        self::assertCount(2, $messages);
+
+        /** @var SchedulerOperationCanceled $message */
+        $message = \end($messages);
+
+        self::assertInstanceOf(SchedulerOperationCanceled::class, $message);
+
+        $resultSet  = wait(self::$adapter->execute('SELECT count(id) as cnt from scheduler_registry'));
+        $operations = wait(fetchOne($resultSet));
+
+        self::assertSame(0, (int) $operations['cnt']);
     }
 
     /**
      * @test
-     *
-     * @throws \Throwable
      */
     public function cancelUnknownOperation(): void
     {
-        Loop::run(
-            function (): \Generator
-            {
-                $context = new Context();
+        $context = new Context();
 
-                yield $this->provider->cancel(ScheduledOperationId::new(), $context);
+        wait($this->provider->cancel(ScheduledOperationId::new(), $context));
 
-                self::assertCount(1, $context->messages);
-            }
-        );
+        self::assertCount(1, $context->messages);
     }
 }
