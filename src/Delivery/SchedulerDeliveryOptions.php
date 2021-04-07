@@ -56,7 +56,7 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
 
     public function isHighestPriority(): bool
     {
-        return true;
+        return false;
     }
 
     public function expirationAfter(): ?int
