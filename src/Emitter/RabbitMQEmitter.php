@@ -8,11 +8,10 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Emitter;
 
-use function Amp\call;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Scheduler\Contract\EmitSchedulerOperation;
@@ -24,11 +23,9 @@ use ServiceBus\Scheduler\Exceptions\EmitFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
 use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Scheduler\Store\SchedulerStore;
+use function Amp\call;
 use function ServiceBus\Common\now;
 
-/**
- *
- */
 final class RabbitMQEmitter implements SchedulerEmitter
 {
     /**
@@ -129,11 +126,21 @@ final class RabbitMQEmitter implements SchedulerEmitter
 
     /**
      * Calculate next execution delay.
+     *
+     * @psalm-return positive-int
      */
     private function calculateExecutionDelay(NextScheduledOperation $nextScheduledOperation): int
     {
         $executionDelay = $nextScheduledOperation->time->getTimestamp() - now()->getTimestamp();
 
-        return (int) bcmul((string) $executionDelay, '1000');
+        /**
+         * @psalm-var positive-int $delay
+         *
+         * @noinspection OneTimeUseVariablesInspection
+         * @noinspection PhpUnnecessaryLocalVariableInspection
+         */
+        $delay = (int) bcmul((string) $executionDelay, '1000');
+
+        return $delay;
     }
 }

@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
 
 /**
  * Scheduler implementation.
@@ -8,12 +10,10 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace ServiceBus\Scheduler\Tests;
 
-use function Amp\Promise\wait;
-use function ServiceBus\Storage\Sql\fetchOne;
 use PHPUnit\Framework\TestCase;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
@@ -26,6 +26,8 @@ use ServiceBus\Scheduler\Store\SqlSchedulerStore;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\StorageConfiguration;
 use ServiceBus\Storage\Sql\DoctrineDBAL\DoctrineDBALAdapter;
+use function Amp\Promise\wait;
+use function ServiceBus\Storage\Sql\fetchOne;
 
 /**
  *

@@ -8,12 +8,12 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Data;
 
-use function ServiceBus\Common\datetimeInstantiator;
 use ServiceBus\Scheduler\ScheduledOperationId;
+use function ServiceBus\Common\datetimeInstantiator;
 
 /**
  * Scheduled job data (for next job).
@@ -41,7 +41,7 @@ final class NextScheduledOperation
     public $time;
 
     /**
-     * @psalm-param array<string, string> $row
+     * @psalm-param array{processing_date:non-empty-string,id:non-empty-string} $row
      *
      * @throws \ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed
      * @throws \ServiceBus\Common\Exceptions\DateTimeException

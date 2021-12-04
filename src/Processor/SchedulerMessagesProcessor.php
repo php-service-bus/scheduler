@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Processor;
 
@@ -60,25 +60,20 @@ final class SchedulerMessagesProcessor implements MessageExecutor
                 if ($message instanceof EmitSchedulerOperation)
                 {
                     yield $this->emitter->emit($message->id, $context);
-
-                    return;
                 }
-
-                if (
+                elseif (
                     $message instanceof SchedulerOperationEmitted ||
                     $message instanceof SchedulerOperationCanceled ||
                     $message instanceof OperationScheduled
                 ) {
-                    /** @var OperationScheduled|SchedulerOperationCanceled|SchedulerOperationEmitted $message */
-
                     yield $this->emitter->emitNextOperation($message->nextOperation, $context);
-
-                    return;
                 }
-
-                throw new \LogicException(
-                    \sprintf('Unsupported message type specified (%s)', \get_class($message))
-                );
+                else
+                {
+                    throw new \LogicException(
+                        \sprintf('Unsupported message type specified (%s)', \get_class($message))
+                    );
+                }
             }
         );
     }

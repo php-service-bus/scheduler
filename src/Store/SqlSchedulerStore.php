@@ -8,17 +8,10 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Store;
 
-use function Amp\call;
-use function ServiceBus\Storage\Sql\deleteQuery;
-use function ServiceBus\Storage\Sql\equalsCriteria;
-use function ServiceBus\Storage\Sql\fetchOne;
-use function ServiceBus\Storage\Sql\insertQuery;
-use function ServiceBus\Storage\Sql\selectQuery;
-use function ServiceBus\Storage\Sql\updateQuery;
 use Amp\Promise;
 use ServiceBus\Scheduler\Data\NextScheduledOperation;
 use ServiceBus\Scheduler\Data\ScheduledOperation;
@@ -27,6 +20,13 @@ use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Storage\Common\BinaryDataDecoder;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\QueryExecutor;
+use function Amp\call;
+use function ServiceBus\Storage\Sql\deleteQuery;
+use function ServiceBus\Storage\Sql\equalsCriteria;
+use function ServiceBus\Storage\Sql\fetchOne;
+use function ServiceBus\Storage\Sql\insertQuery;
+use function ServiceBus\Storage\Sql\selectQuery;
+use function ServiceBus\Storage\Sql\updateQuery;
 
 /**
  *
@@ -121,7 +121,7 @@ final class SqlSchedulerStore implements SchedulerStore
         /**
          * @psalm-var \Latitude\QueryBuilder\Query\SelectQuery $selectQuery
          */
-        $selectQuery = selectQuery(self::TABLE_NAME)
+        $selectQuery = selectQuery(self::TABLE_NAME, 'id', 'processing_date')
             ->where(equalsCriteria('is_sent', 0))
             ->orderBy('processing_date', 'ASC')
             ->limit(1);
@@ -135,7 +135,12 @@ final class SqlSchedulerStore implements SchedulerStore
          */
         $resultSet = yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
-        /** @psalm-var array<string, string>|null $result */
+        /**
+         * @psalm-var array{
+         *     id:non-empty-string,
+         *     processing_date:non-empty-string
+         * }|null $result
+         */
         $result = yield fetchOne($resultSet);
 
         if ($result !== null)
@@ -202,7 +207,14 @@ final class SqlSchedulerStore implements SchedulerStore
          */
         $resultSet = yield $queryExecutor->execute($compiledQuery->sql(), $compiledQuery->params());
 
-        /** @psalm-var array{processing_date:string, command:string, id:string, is_sent:bool}|null $result */
+        /**
+         * @psalm-var array{
+         *     processing_date:non-empty-string,
+         *     command:non-empty-string,
+         *     id:non-empty-string,
+         *     is_sent:bool
+         * }|null $result
+         */
         $result = yield fetchOne($resultSet);
 
         if ($result !== null)

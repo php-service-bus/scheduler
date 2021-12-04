@@ -8,14 +8,14 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Data;
 
-use function ServiceBus\Common\datetimeInstantiator;
 use ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate;
 use ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
+use function ServiceBus\Common\datetimeInstantiator;
 use function ServiceBus\Common\now;
 
 /**

@@ -8,12 +8,12 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler;
 
-use function ServiceBus\Common\uuid;
 use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
+use function ServiceBus\Common\uuid;
 
 /**
  * @api
@@ -22,6 +22,8 @@ use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
 final class ScheduledOperationId
 {
     /**
+     * @psalm-var non-empty-string
+     *
      * @var string
      */
     private $value;
@@ -44,11 +46,17 @@ final class ScheduledOperationId
         return new self($value);
     }
 
+    /**
+     * @psalm-return non-empty-string
+     */
     public function toString(): string
     {
         return $this->value;
     }
 
+    /**
+     * @psalm-param non-empty-string $value
+     */
     private function __construct(string $value)
     {
         $this->value = $value;

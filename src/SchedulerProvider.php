@@ -8,11 +8,10 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler;
 
-use function Amp\call;
 use Amp\Promise;
 use ServiceBus\Common\Context\ServiceBusContext;
 use ServiceBus\Scheduler\Contract\OperationScheduled;
@@ -24,6 +23,7 @@ use ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation;
 use ServiceBus\Scheduler\Exceptions\OperationSchedulingError;
 use ServiceBus\Scheduler\Store\SchedulerStore;
 use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
+use function Amp\call;
 
 /**
  * Scheduler provider.

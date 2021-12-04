@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Contract;
 
@@ -49,11 +49,6 @@ final class SchedulerOperationCanceled
      */
     public $nextOperation;
 
-    /**
-     * @param ScheduledOperationId        $id
-     * @param string|null                 $reason
-     * @param NextScheduledOperation|null $nextOperation
-     */
     public function __construct(ScheduledOperationId $id, ?string $reason, ?NextScheduledOperation $nextOperation = null)
     {
         $this->id            = $id;

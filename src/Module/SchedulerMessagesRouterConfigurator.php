@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Module;
 
@@ -22,9 +22,6 @@ use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
 use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
 use ServiceBus\Scheduler\Processor\SchedulerMessagesProcessor;
 
-/**
- *
- */
 final class SchedulerMessagesRouterConfigurator implements RouterConfigurator
 {
     /**

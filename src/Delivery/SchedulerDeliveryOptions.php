@@ -8,15 +8,12 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Delivery;
 
 use ServiceBus\Common\Endpoint\DeliveryOptions;
 
-/**
- *
- */
 final class SchedulerDeliveryOptions implements DeliveryOptions
 {
     /**
@@ -26,6 +23,9 @@ final class SchedulerDeliveryOptions implements DeliveryOptions
      */
     private $headers;
 
+    /**
+     * @psalm-param positive-int $delay
+     */
     public static function scheduledMessage(int $delay): self
     {
         return new self(['x-delay' => $delay]);

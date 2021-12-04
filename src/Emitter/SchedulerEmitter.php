@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Emitter;
 
@@ -26,7 +26,7 @@ interface SchedulerEmitter
      * Emit operation (send scheduled command to destination queue)
      * Deletes the task from the database (@see SchedulerStore::extract()) after the event is sent.
      *
-     * @return Promise<void>
+     * @psalm-return Promise<void>
      *
      * @see SchedulerOperationEmitted event
      *
@@ -37,7 +37,7 @@ interface SchedulerEmitter
     /**
      * Emit next operation.
      *
-     * @return Promise<void>
+     * @psalm-return Promise<void>
      *
      * @see EmitSchedulerOperation command
      *

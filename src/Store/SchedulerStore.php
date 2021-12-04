@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Store;
 
@@ -26,7 +26,7 @@ interface SchedulerStore
      *
      * @psalm-param callable(?ScheduledOperation, ?\ServiceBus\Scheduler\Data\NextScheduledOperation):\Generator $postExtract
      *
-     * @return Promise<void>
+     * @psalm-return Promise<void>
      *
      * @throws \ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
@@ -40,7 +40,7 @@ interface SchedulerStore
      *
      * @psalm-param callable(?\ServiceBus\Scheduler\Data\NextScheduledOperation):\Generator $postRemove
      *
-     * @return Promise<void>
+     * @psalm-return Promise<void>
      *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed
@@ -53,7 +53,7 @@ interface SchedulerStore
      *
      * @psalm-param callable(ScheduledOperation, ?\ServiceBus\Scheduler\Data\NextScheduledOperation):\Generator $postAdd
      *
-     * @return Promise<void>
+     * @psalm-return Promise<void>
      *
      * @throws \ServiceBus\Storage\Common\Exceptions\ConnectionFailed
      * @throws \ServiceBus\Storage\Common\Exceptions\StorageInteractingFailed

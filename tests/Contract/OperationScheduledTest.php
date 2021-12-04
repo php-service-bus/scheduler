@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace ServiceBus\Scheduler\Tests\Contract;
 
@@ -29,7 +29,7 @@ final class OperationScheduledTest extends TestCase
      */
     public function create(): void
     {
-        $command = new class()
+        $command = new class ()
         {
         };
 
