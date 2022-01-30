@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types=0);
+declare(strict_types = 0);
 
 namespace ServiceBus\Scheduler\Processor;
 
@@ -40,7 +40,10 @@ final class SchedulerMessagesProcessor implements MessageExecutor
 
     public function id(): string
     {
-        return \sha1(\sprintf('%s:%s', __CLASS__, __METHOD__));
+        /** @psalm-var non-empty-string $id */
+        $id = \sha1(\sprintf('%s:%s', __CLASS__, __METHOD__));
+
+        return $id;
     }
 
     public function retryStrategy(): ?RetryStrategy
@@ -55,17 +58,18 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     public function __invoke(object $message, ServiceBusContext $context): Promise
     {
         return call(
-            function () use ($message, $context): \Generator
+            function() use ($message, $context): \Generator
             {
-                if ($message instanceof EmitSchedulerOperation)
+                if($message instanceof EmitSchedulerOperation)
                 {
                     yield $this->emitter->emit($message->id, $context);
                 }
-                elseif (
+                else if(
                     $message instanceof SchedulerOperationEmitted ||
                     $message instanceof SchedulerOperationCanceled ||
                     $message instanceof OperationScheduled
-                ) {
+                )
+                {
                     yield $this->emitter->emitNextOperation($message->nextOperation, $context);
                 }
                 else
