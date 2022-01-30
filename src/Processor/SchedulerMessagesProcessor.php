@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/MIT
  */
 
-declare(strict_types = 0);
+declare(strict_types=0);
 
 namespace ServiceBus\Scheduler\Processor;
 
@@ -58,18 +58,17 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     public function __invoke(object $message, ServiceBusContext $context): Promise
     {
         return call(
-            function() use ($message, $context): \Generator
+            function () use ($message, $context): \Generator
             {
-                if($message instanceof EmitSchedulerOperation)
+                if ($message instanceof EmitSchedulerOperation)
                 {
                     yield $this->emitter->emit($message->id, $context);
                 }
-                else if(
+                elseif (
                     $message instanceof SchedulerOperationEmitted ||
                     $message instanceof SchedulerOperationCanceled ||
                     $message instanceof OperationScheduled
-                )
-                {
+                ) {
                     yield $this->emitter->emitNextOperation($message->nextOperation, $context);
                 }
                 else
