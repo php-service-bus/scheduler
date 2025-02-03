@@ -23,6 +23,7 @@ use ServiceBus\Scheduler\Exceptions\EmitFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
 use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Scheduler\Store\SchedulerStore;
+
 use function Amp\call;
 use function ServiceBus\Common\now;
 
@@ -41,37 +42,32 @@ final class RabbitMQEmitter implements SchedulerEmitter
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise
     {
         return call(
-            function () use ($id, $context): \Generator
-            {
-                try
-                {
+            function () use ($id, $context): \Generator {
+                try {
                     yield $this->store->extract($id, $this->createPostExtract($context));
-                }
-                catch (ScheduledOperationNotFound $exception)
-                {
+                } catch (ScheduledOperationNotFound $exception) {
                     $context->logger()->throwable($exception);
 
                     yield $context->delivery(
                         new SchedulerOperationEmitted($id)
                     );
-                }
-                catch (\Throwable $throwable)
-                {
+                } catch (\Throwable $throwable) {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
             }
         );
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
     public function emitNextOperation(?NextScheduledOperation $nextOperation, ServiceBusContext $context): Promise
     {
         return call(
-            function () use ($nextOperation, $context): \Generator
-            {
-                try
-                {
-                    if ($nextOperation === null)
-                    {
+            function () use ($nextOperation, $context): \Generator {
+                try {
+                    if ($nextOperation === null) {
                         $context->logger()->debug('Next operation not specified');
 
                         return;
@@ -92,9 +88,7 @@ final class RabbitMQEmitter implements SchedulerEmitter
                             'scheduledOperationDelay' => $delay / 1000,
                         ]
                     );
-                }
-                catch (\Throwable $throwable)
-                {
+                } catch (\Throwable $throwable) {
                     throw new EmitFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
             }
@@ -106,10 +100,8 @@ final class RabbitMQEmitter implements SchedulerEmitter
      */
     private function createPostExtract(ServiceBusContext $context): callable
     {
-        return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
-        {
-            if ($operation !== null)
-            {
+        return static function (?ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator {
+            if ($operation !== null) {
                 yield $context->delivery($operation->command);
                 yield $context->delivery(new SchedulerOperationEmitted($operation->id, $nextOperation));
 

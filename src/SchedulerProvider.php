@@ -23,6 +23,7 @@ use ServiceBus\Scheduler\Exceptions\ErrorCancelingScheduledOperation;
 use ServiceBus\Scheduler\Exceptions\OperationSchedulingError;
 use ServiceBus\Scheduler\Store\SchedulerStore;
 use ServiceBus\Storage\Common\Exceptions\UniqueConstraintViolationCheckFailed;
+
 use function Amp\call;
 
 /**
@@ -58,10 +59,8 @@ final class SchedulerProvider
         $operation = ScheduledOperation::new($id, $command, $executionDate);
 
         return call(
-            function () use ($operation, $context): \Generator
-            {
-                try
-                {
+            function () use ($operation, $context): \Generator {
+                try {
                     yield $this->store->add($operation, self::createPostAdd($context));
 
                     $context->logger()->debug(
@@ -71,17 +70,13 @@ final class SchedulerProvider
                             'executionDate' => $operation->date->format('Y-m-d H:i:s'),
                         ]
                     );
-                }
-                catch (UniqueConstraintViolationCheckFailed $exception)
-                {
+                } catch (UniqueConstraintViolationCheckFailed $exception) {
                     throw new DuplicateScheduledOperation(
                         \sprintf('Job with ID "%s" already exists', $operation->id->toString()),
-                        (int) $exception->getCode(),
+                        $exception->getCode(),
                         $exception
                     );
-                }
-                catch (\Throwable $throwable)
-                {
+                } catch (\Throwable $throwable) {
                     throw new OperationSchedulingError($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
                 }
             }
@@ -96,14 +91,10 @@ final class SchedulerProvider
     public function cancel(ScheduledOperationId $id, ServiceBusContext $context, ?string $reason = null): Promise
     {
         return call(
-            function () use ($id, $context, $reason): \Generator
-            {
-                try
-                {
+            function () use ($id, $context, $reason): \Generator {
+                try {
                     yield $this->store->remove($id, self::createPostCancel($context, $id, $reason));
-                }
-                catch (\Throwable $throwable)
-                {
+                } catch (\Throwable $throwable) {
                     throw new ErrorCancelingScheduledOperation(
                         $throwable->getMessage(),
                         (int) $throwable->getCode(),
@@ -119,8 +110,7 @@ final class SchedulerProvider
      */
     private static function createPostCancel(ServiceBusContext $context, ScheduledOperationId $id, ?string $reason): callable
     {
-        return static function (?NextScheduledOperation $nextOperation) use ($id, $reason, $context): \Generator
-        {
+        return static function (?NextScheduledOperation $nextOperation) use ($id, $reason, $context): \Generator {
             yield $context->delivery(
                 new SchedulerOperationCanceled($id, $reason, $nextOperation)
             );
@@ -132,8 +122,7 @@ final class SchedulerProvider
      */
     private static function createPostAdd(ServiceBusContext $context): callable
     {
-        return static function (ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator
-        {
+        return static function (ScheduledOperation $operation, ?NextScheduledOperation $nextOperation) use ($context): \Generator {
             /** @psalm-var class-string $commandClass */
             $commandClass = \get_class($operation->command);
 

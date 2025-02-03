@@ -13,6 +13,7 @@ declare(strict_types=0);
 namespace ServiceBus\Scheduler\Data;
 
 use ServiceBus\Scheduler\ScheduledOperationId;
+
 use function ServiceBus\Common\datetimeInstantiator;
 
 /**

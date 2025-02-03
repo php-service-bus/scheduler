@@ -39,8 +39,7 @@ final class SchedulerMessagesRouterConfigurator implements RouterConfigurator
      */
     public function configure(Router $router): void
     {
-        try
-        {
+        try {
             $processor = new SchedulerMessagesProcessor($this->emitter);
 
             $listenEvents = [
@@ -49,15 +48,12 @@ final class SchedulerMessagesRouterConfigurator implements RouterConfigurator
                 OperationScheduled::class,
             ];
 
-            foreach ($listenEvents as $event)
-            {
+            foreach ($listenEvents as $event) {
                 $router->registerListener($event, $processor);
             }
 
             $router->registerHandler(EmitSchedulerOperation::class, $processor);
-        }
-        catch (\Throwable $throwable)
-        {
+        } catch (\Throwable $throwable) {
             throw new MessageRouterConfigurationFailed($throwable->getMessage(), (int) $throwable->getCode(), $throwable);
         }
     }

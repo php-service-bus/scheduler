@@ -15,6 +15,7 @@ namespace ServiceBus\Scheduler\Data;
 use ServiceBus\Scheduler\Exceptions\InvalidScheduledOperationExecutionDate;
 use ServiceBus\Scheduler\Exceptions\UnserializeCommandFailed;
 use ServiceBus\Scheduler\ScheduledOperationId;
+
 use function ServiceBus\Common\datetimeInstantiator;
 use function ServiceBus\Common\now;
 
@@ -83,15 +84,14 @@ final class ScheduledOperation
         /** @var \DateTimeImmutable $dateTime */
         $dateTime = datetimeInstantiator($data['processing_date']);
 
+        /** @var string|false $serializedCommand */
         $serializedCommand = \base64_decode($data['command']);
 
-        if (\is_string($serializedCommand))
-        {
+        if (\is_string($serializedCommand)) {
             /** @var false|object $command */
             $command = \unserialize($serializedCommand, ['allowed_classes' => true]);
 
-            if (\is_object($command))
-            {
+            if (\is_object($command)) {
                 return new self(
                     ScheduledOperationId::restore($data['id']),
                     $command,
@@ -121,17 +121,13 @@ final class ScheduledOperation
      */
     private static function validateDatetime(\DateTimeImmutable $dateTime): void
     {
-        try
-        {
-            if (now() >= $dateTime)
-            {
+        try {
+            if (now() >= $dateTime) {
                 throw new \InvalidArgumentException(
                     'The date of the scheduled task should be greater than the current one'
                 );
             }
-        }
-        catch (\Throwable $throwable)
-        {
+        } catch (\Throwable $throwable) {
             throw new InvalidScheduledOperationExecutionDate(
                 $throwable->getMessage(),
                 (int) $throwable->getCode(),

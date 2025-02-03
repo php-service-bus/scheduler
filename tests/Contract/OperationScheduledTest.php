@@ -29,8 +29,7 @@ final class OperationScheduledTest extends TestCase
      */
     public function create(): void
     {
-        $command = new class ()
-        {
+        $command = new class () {
         };
 
         $id       = ScheduledOperationId::restore('qwerty');

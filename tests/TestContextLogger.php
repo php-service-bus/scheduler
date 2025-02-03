@@ -7,6 +7,7 @@ namespace ServiceBus\Scheduler\Tests;
 use Monolog\Logger;
 use Psr\Log\LogLevel;
 use ServiceBus\Common\Context\ContextLogger;
+
 use function ServiceBus\Common\throwableMessage;
 
 /**

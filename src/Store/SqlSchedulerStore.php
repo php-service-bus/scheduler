@@ -20,6 +20,7 @@ use ServiceBus\Scheduler\Store\Exceptions\ScheduledOperationNotFound;
 use ServiceBus\Storage\Common\BinaryDataDecoder;
 use ServiceBus\Storage\Common\DatabaseAdapter;
 use ServiceBus\Storage\Common\QueryExecutor;
+
 use function Amp\call;
 use function ServiceBus\Storage\Sql\deleteQuery;
 use function ServiceBus\Storage\Sql\equalsCriteria;
@@ -48,13 +49,11 @@ final class SqlSchedulerStore implements SchedulerStore
     public function extract(ScheduledOperationId $id, callable $postExtract): Promise
     {
         return call(
-            function () use ($id, $postExtract): \Generator
-            {
+            function () use ($id, $postExtract): \Generator {
                 /** @var ScheduledOperation|null $operation */
                 $operation = yield from self::load($this->adapter, $id);
 
-                if ($operation === null)
-                {
+                if ($operation === null) {
                     throw new ScheduledOperationNotFound(
                         \sprintf('Operation with ID "%s" not found', $id->toString())
                     );
@@ -73,8 +72,7 @@ final class SqlSchedulerStore implements SchedulerStore
     public function remove(ScheduledOperationId $id, callable $postRemove): Promise
     {
         return call(
-            function () use ($id, $postRemove): \Generator
-            {
+            function () use ($id, $postRemove): \Generator {
                 yield from self::delete($this->adapter, $id);
 
                 /** @var NextScheduledOperation|null $nextOperation */
@@ -88,8 +86,7 @@ final class SqlSchedulerStore implements SchedulerStore
     public function add(ScheduledOperation $operation, callable $postAdd): Promise
     {
         return call(
-            function () use ($operation, $postAdd): \Generator
-            {
+            function () use ($operation, $postAdd): \Generator {
                 $insertQuery = insertQuery('scheduler_registry', [
                     'id'              => $operation->id->toString(),
                     'processing_date' => $operation->date->format('Y-m-d H:i:s.u'),
@@ -143,13 +140,11 @@ final class SqlSchedulerStore implements SchedulerStore
          */
         $result = yield fetchOne($resultSet);
 
-        if ($result !== null)
-        {
+        if ($result !== null) {
             /** @var int $affectedRows */
             $affectedRows = yield from self::updateBarrierFlag($queryExecutor, $result['id']);
 
-            if ($affectedRows !== 0)
-            {
+            if ($affectedRows !== 0) {
                 return NextScheduledOperation::fromRow($result);
             }
         }
@@ -217,10 +212,8 @@ final class SqlSchedulerStore implements SchedulerStore
          */
         $result = yield fetchOne($resultSet);
 
-        if ($result !== null)
-        {
-            if ($queryExecutor instanceof BinaryDataDecoder)
-            {
+        if ($result !== null) {
+            if ($queryExecutor instanceof BinaryDataDecoder) {
                 $result['command'] = $queryExecutor->unescapeBinary($result['command']);
             }
 

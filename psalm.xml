@@ -21,7 +21,4 @@
         <PropertyNotSetInConstructor errorLevel="suppress"/>
         <UnnecessaryVarAnnotation errorLevel="suppress"/>
     </issueHandlers>
-    <plugins>
-        <pluginClass class="Boesing\PsalmPluginStringf\Plugin"/>
-    </plugins>
 </psalm>

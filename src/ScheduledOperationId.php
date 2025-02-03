@@ -13,6 +13,7 @@ declare(strict_types=0);
 namespace ServiceBus\Scheduler;
 
 use ServiceBus\Scheduler\Exceptions\EmptyScheduledOperationIdentifierNotAllowed;
+
 use function ServiceBus\Common\uuid;
 
 /**
@@ -38,8 +39,7 @@ final class ScheduledOperationId
      */
     public static function restore(string $value): self
     {
-        if ($value === '')
-        {
+        if ($value === '') {
             throw new EmptyScheduledOperationIdentifierNotAllowed('Scheduled operation ID can\'t be empty');
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ServiceBus\Scheduler\Tests;
 
 use ServiceBus\Common\Context\IncomingMessageMetadata;
+
 use function ServiceBus\Common\uuid;
 
 /**

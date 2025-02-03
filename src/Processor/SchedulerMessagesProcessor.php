@@ -21,6 +21,7 @@ use ServiceBus\Scheduler\Contract\OperationScheduled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationCanceled;
 use ServiceBus\Scheduler\Contract\SchedulerOperationEmitted;
 use ServiceBus\Scheduler\Emitter\SchedulerEmitter;
+
 use function Amp\call;
 
 /**
@@ -58,21 +59,16 @@ final class SchedulerMessagesProcessor implements MessageExecutor
     public function __invoke(object $message, ServiceBusContext $context): Promise
     {
         return call(
-            function () use ($message, $context): \Generator
-            {
-                if ($message instanceof EmitSchedulerOperation)
-                {
+            function () use ($message, $context): \Generator {
+                if ($message instanceof EmitSchedulerOperation) {
                     yield $this->emitter->emit($message->id, $context);
-                }
-                elseif (
+                } elseif (
                     $message instanceof SchedulerOperationEmitted ||
                     $message instanceof SchedulerOperationCanceled ||
                     $message instanceof OperationScheduled
                 ) {
                     yield $this->emitter->emitNextOperation($message->nextOperation, $context);
-                }
-                else
-                {
+                } else {
                     throw new \LogicException(
                         \sprintf('Unsupported message type specified (%s)', \get_class($message))
                     );

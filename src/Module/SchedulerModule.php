@@ -75,8 +75,7 @@ final class SchedulerModule implements ServiceBusModule
      */
     private function getRouterConfiguratorDefinition(ContainerBuilder $containerBuilder): Definition
     {
-        if (false === $containerBuilder->hasDefinition(ChainRouterConfigurator::class))
-        {
+        if (false === $containerBuilder->hasDefinition(ChainRouterConfigurator::class)) {
             $containerBuilder->addDefinitions(
                 [
                     ChainRouterConfigurator::class => new Definition(ChainRouterConfigurator::class),
@@ -86,8 +85,7 @@ final class SchedulerModule implements ServiceBusModule
 
         $routerConfiguratorDefinition = $containerBuilder->getDefinition(ChainRouterConfigurator::class);
 
-        if (false === $containerBuilder->hasDefinition(Router::class))
-        {
+        if (false === $containerBuilder->hasDefinition(Router::class)) {
             $containerBuilder->addDefinitions([Router::class => new Definition(Router::class)]);
         }
 
@@ -109,8 +107,7 @@ final class SchedulerModule implements ServiceBusModule
      */
     private function registerEmitter(ContainerBuilder $containerBuilder): void
     {
-        if (self::TYPE === $this->adapterType)
-        {
+        if (self::TYPE === $this->adapterType) {
             $containerBuilder->addDefinitions([
                 SchedulerEmitter::class => (new Definition(RabbitMQEmitter::class))
                     ->setArguments([new Reference(SchedulerStore::class)]),
