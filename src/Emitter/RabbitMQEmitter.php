@@ -34,9 +34,15 @@ final class RabbitMQEmitter implements SchedulerEmitter
      */
     private $store;
 
-    public function __construct(SchedulerStore $store)
+    /**
+     * @var bool
+     */
+    private $deliverWithHighestPriority;
+
+    public function __construct(SchedulerStore $store, ?bool $deliverWithHighestPriority = null)
     {
         $this->store = $store;
+        $this->deliverWithHighestPriority = $deliverWithHighestPriority ?? true;
     }
 
     public function emit(ScheduledOperationId $id, ServiceBusContext $context): Promise
@@ -75,11 +81,11 @@ final class RabbitMQEmitter implements SchedulerEmitter
 
                     $delay = $this->calculateExecutionDelay($nextOperation);
 
+                    $deliveryOptions = SchedulerDeliveryOptions::scheduledMessage($delay)
+                        ->withIsHighestPriority($this->deliverWithHighestPriority);
+
                     /** Message will return after a specified time interval */
-                    yield $context->delivery(
-                        new EmitSchedulerOperation($nextOperation->id),
-                        SchedulerDeliveryOptions::scheduledMessage($delay)
-                    );
+                    yield $context->delivery(new EmitSchedulerOperation($nextOperation->id), $deliveryOptions);
 
                     $context->logger()->debug(
                         'Scheduled operation with identifier "{scheduledOperationId}" will be executed after "{scheduledOperationDelay}" seconds',
