@@ -22,6 +22,7 @@ use ServiceBus\Scheduler\Store\SchedulerStore;
 use ServiceBus\Scheduler\Store\SqlSchedulerStore;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
 final class SchedulerModule implements ServiceBusModule
@@ -108,9 +109,14 @@ final class SchedulerModule implements ServiceBusModule
     private function registerEmitter(ContainerBuilder $containerBuilder): void
     {
         if (self::TYPE === $this->adapterType) {
+            $containerBuilder->setParameter('service_bus.scheduler.deliver_with_highest_priority', true);
+
             $containerBuilder->addDefinitions([
                 SchedulerEmitter::class => (new Definition(RabbitMQEmitter::class))
-                    ->setArguments([new Reference(SchedulerStore::class)]),
+                    ->setArguments([
+                        new Reference(SchedulerStore::class),
+                        '%service_bus.scheduler.deliver_with_highest_priority%',
+                    ]),
             ]);
 
             return;

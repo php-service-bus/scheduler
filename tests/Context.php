@@ -41,6 +41,8 @@ final class Context implements ServiceBusContext
      */
     public $logHandler;
 
+    public ?DeliveryOptions $deliveryOptions = null;
+
     public function violations(): ?ValidationViolations
     {
         return null;
@@ -57,6 +59,7 @@ final class Context implements ServiceBusContext
         ?OutcomeMessageMetadata $withMetadata = null
     ): Promise {
         $this->messages[] = $message;
+        $this->deliveryOptions = $deliveryOptions;
 
         return new Success();
     }
@@ -66,6 +69,7 @@ final class Context implements ServiceBusContext
         ?DeliveryOptions $deliveryOptions = null,
         ?OutcomeMessageMetadata $withMetadata = null
     ): Promise {
+        $this->deliveryOptions = $deliveryOptions;
         $this->messages = \array_merge($this->messages, $messages);
 
         return new Success();
